@@ -1,22 +1,8 @@
 import Head from 'next/head'
-import { useSWRInfinite } from 'swr'
-import client from '../api/client'
-import ArticleCard from '../components/ArticleCard'
 import styles from '../styles/Home.module.css'
-import { Article } from '../types/article'
-
-const fetcher = (url: string) => client.get(url).then(res => res.data);
-
-const getKey = (pageIndex, prevPageData) => {
-  if (prevPageData && !prevPageData.length) return null;
-
-  return `/articles?page=${pageIndex + 1}`;
-}
+import Feed from '../components/Feed'
 
 export default function Home() {
-  const { data, error } = useSWRInfinite(getKey, fetcher)
-  const articles: Article[] = data ? [].concat(...data) : [];
-
   return (
     <div className="container mx-auto">
       <Head>
@@ -25,13 +11,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="grid grid-cols-12">
-        <div className="col-span-12 md:col-span-8">
-          {articles.map(article => (
-            <ArticleCard key={article.id} article={article}/>
-          ))}
-        </div>
-      </div>
+      <Feed/>
     </div>
   )
 }
