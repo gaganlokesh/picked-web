@@ -9,6 +9,15 @@ interface ArticleProps {
 const ArticleCard = (props: ArticleProps): JSX.Element => {
   const { article } = props;
 
+  const formatDate = (date: Date): string => {
+    const instance = dayjs(date);
+    if (instance.year() !== dayjs().year()) {
+      return instance.format('D MMM, YYYY');
+    }
+
+    return instance.format('D MMM');
+  }
+
   return (
     <>
       <article className="px-3 py-4 grid grid-cols-12">
@@ -33,7 +42,7 @@ const ArticleCard = (props: ArticleProps): JSX.Element => {
             <a href={article.url}>{article.title}</a>
           </h3>
           <div className="text-xs md:text-base font-light">
-            <span>{dayjs(article.publishedAt).format('D MMM')}</span>
+            <span>{formatDate(article.publishedAt)}</span>
             {!!article.readTime && (
               <>
                 <span>&nbsp;•&nbsp;</span>
