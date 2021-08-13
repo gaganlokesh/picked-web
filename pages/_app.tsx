@@ -2,11 +2,54 @@ import '../styles/globals.css'
 
 import { ReactElement } from 'react'
 import type { AppProps } from 'next/app'
+import { AuthProvider, useAuth } from '../contexts/AuthContext';
+import LoginModal from '../components/LoginModal';
 
-function MyApp({ Component, pageProps }: AppProps): ReactElement {
+function Layout({ Component, pageProps }: AppProps): ReactElement {
+  const {
+    isLoggedIn,
+    shouldOpenLoginModal,
+    openLoginModal,
+    closeLoginModal,
+    logout
+  } = useAuth();
+
+  return (
+    <>
+      <header>
+        {isLoggedIn ? (
+          <button
+            className="text-md ml-auto uppercase"
+            onClick={logout}
+          >
+            Logout
+          </button>
+        ) : (
+          <button
+            className="text-md ml-auto uppercase"
+            onClick={openLoginModal}
+          >
+            Login
+          </button>
+        )}
+      </header>
+
+      <Component {...pageProps} />
+
+      {!isLoggedIn && (
+        <LoginModal
+          open={shouldOpenLoginModal}
+          onClose={closeLoginModal}
+        />
+      )}
+    </>
+  )
+}
+
+function MyApp(props: AppProps): ReactElement {
   return (
     <AuthProvider>
-      <Component {...pageProps} />
+      <Layout {...props} />
     </AuthProvider>
   )
 }
