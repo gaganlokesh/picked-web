@@ -1,9 +1,9 @@
 import { AxiosResponse } from "axios";
-import { AuthProvider, TokenResponse } from "../types/auth";
+import { OAuthProvider, TokenResponse } from "../types/auth";
 import client from "./client";
 
-export async function getAccessToken(provider: AuthProvider, assertion: string): Promise<TokenResponse> {
-  const response = await client.post("oauth/token", {
+export const getAccessToken = (provider: OAuthProvider, assertion: string): Promise<TokenResponse> => {
+  return client.post("oauth/token", {
     client_id: process.env.NEXT_PUBLIC_API_CLIENT_ID,
     client_secret: process.env.NEXT_PUBLIC_API_CLIENT_SECRET,
     grant_type: "assertion",
@@ -17,12 +17,10 @@ export async function getAccessToken(provider: AuthProvider, assertion: string):
     // Handle error case
     return err;
   });
-
-  return response;
 }
 
-export async function refreshAccessToken(token: string): Promise<TokenResponse> {
-  const response = await client.post("oauth/token", {
+export const refreshAccessToken = (token: string): Promise<TokenResponse> => {
+  return client.post("oauth/token", {
     client_id: process.env.NEXT_PUBLIC_API_CLIENT_ID,
     client_secret: process.env.NEXT_PUBLIC_API_CLIENT_SECRET,
     grant_type: "refresh_token",
@@ -35,6 +33,4 @@ export async function refreshAccessToken(token: string): Promise<TokenResponse> 
     // Handle error case
     return err;
   });
-
-  return response;
 }

@@ -1,6 +1,6 @@
 type TokenType = "Bearer"
 
-export type AuthProvider = "google" | "github";
+export type OAuthProvider = "google" | "github";
 
 export interface TokenResponse {
   accessToken: string
