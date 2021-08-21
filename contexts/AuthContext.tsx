@@ -6,7 +6,8 @@ import React, {
   useMemo,
   useState
 } from "react";
-import { login, logout } from "../lib/auth";
+import { login, logout, githubSigninPopup, googleSigninPopup } from "../lib/auth";
+import firebase from "../lib/firebase";
 import { OAuthProvider } from "../types/auth";
 
 interface AuthContextData {
@@ -14,7 +15,8 @@ interface AuthContextData {
   shouldOpenLoginModal: boolean;
   openLoginModal: () => void;
   closeLoginModal: () => void;
-  login: (provider: OAuthProvider, token: string) => Promise<void>;
+  loginWithGithub: () => Promise<void>;
+  loginWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -34,12 +36,34 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
     }
   }, [])
 
-  const loginFn = (provider: OAuthProvider, token: string) => {
-    return login(provider, token).then(res => setIsLoggedIn(true));
-  }
+  const handleAuthResponse = useCallback(
+    (provider: OAuthProvider, res: firebase.auth.UserCredential) => {
+      const credential = res.credential as firebase.auth.OAuthCredential;
+      return login(provider, credential.accessToken)
+        .then(() => setIsLoggedIn(true));
+    },
+    [setIsLoggedIn]
+  )
+
+  const loginWithGithub = useCallback(
+    () => {
+      return githubSigninPopup()
+        .then(res => handleAuthResponse('github', res));
+    },
+    [handleAuthResponse]
+  )
+
+  const loginWithGoogle = useCallback(
+    () => {
+      return googleSigninPopup()
+        .then(res => handleAuthResponse('google', res));
+    },
+    [handleAuthResponse]
+  )
 
   const logoutFn = () => {
-    return logout().then(res => setIsLoggedIn(false));
+    return logout()
+      .then(() => setIsLoggedIn(false));
   }
 
   const value = useMemo(
@@ -48,12 +72,15 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
       shouldOpenLoginModal,
       openLoginModal: () => setShouldOpenLoginModal(true),
       closeLoginModal: () => setShouldOpenLoginModal(false),
-      login: loginFn,
+      loginWithGithub,
+      loginWithGoogle,
       logout: logoutFn,
     }),
     [
       isLoggedIn,
-      shouldOpenLoginModal
+      shouldOpenLoginModal,
+      loginWithGithub,
+      loginWithGoogle
     ]
   )
 

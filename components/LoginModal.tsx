@@ -1,9 +1,6 @@
 import { Dialog } from "@headlessui/react";
 import { ReactElement } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { signinWithGithub, signinWithGoogle } from "../lib/auth";
-import firebase from "../lib/firebase";
-import { OAuthProvider } from "../types/auth";
 import SocialLoginButton from "./SocialLoginButton";
 import GithubLogo from "../public/icons/github.svg";
 import GoogleLogo from "../public/icons/google.svg";
@@ -15,20 +12,7 @@ interface ModalProps {
 }
 
 const LoginModal = ({ open, onClose }: ModalProps): ReactElement => {
-  const { login } = useAuth();
-
-  const handleAuthResponse = (provider: OAuthProvider, res: firebase.auth.UserCredential) => {
-    const credential = res.credential as firebase.auth.OAuthCredential;
-    login(provider, credential.accessToken);
-  }
-
-  const handleGoogleSignin = (): void => {
-    signinWithGoogle().then(res => handleAuthResponse('google', res));
-  }
-
-  const handleGithubSignin = (): void => {
-    signinWithGithub().then(res => handleAuthResponse('github', res));
-  }
+  const { loginWithGithub, loginWithGoogle } = useAuth();
 
   return (
     <>
@@ -65,13 +49,13 @@ const LoginModal = ({ open, onClose }: ModalProps): ReactElement => {
               <SocialLoginButton
                 icon={<GoogleLogo/>}
                 text={"Sign in with Google"}
-                onClick={handleGoogleSignin}
+                onClick={loginWithGoogle}
               />
 
               <SocialLoginButton
                 icon={<GithubLogo/>}
                 text={"Sign in with Github"}
-                onClick={handleGithubSignin}
+                onClick={loginWithGithub}
               />
 
               <p className="mt-5 text-sm">
