@@ -4,14 +4,16 @@ import { refreshAccessToken } from "./auth";
 
 let tokenRefreshInitiated: boolean = false;
 
-const client: AxiosInstance = axios.create();
+const client: AxiosInstance & {
+  authorization?: string;
+} = axios.create();
 
 client.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL;
+client.defaults.withCredentials = true;
 
 client.interceptors.request.use(function (config): AxiosRequestConfig {
-  const accessToken = localStorage.getItem("accessToken");
-  if (accessToken) {
-    config.headers["Authorization"] = `Bearer ${accessToken}`;
+  if (client.authorization) {
+    config.headers["Authorization"] = `Bearer ${client.authorization}`;
   }
 
   return config;
@@ -27,34 +29,26 @@ client.interceptors.response.use(function (response): AxiosResponse {
   };
 }, function (error) {
   // Any status codes that falls outside the range of 2xx cause this function to trigger
-  const originalRequest = error.config;
-  let refreshToken = localStorage.getItem("refreshToken");
+  // TODO: Re-authenticate on 401 error using refresh token
 
-  if (
-    !tokenRefreshInitiated && refreshToken
-    && error.response.status === 401 && !originalRequest._retry
-  ) {
-    originalRequest._retry = true;
-    tokenRefreshInitiated = true;
+  // const originalRequest = error.config;
 
-    return refreshAccessToken(refreshToken)
-      .then(res => {
-        if (res.accessToken) {
-          localStorage.setItem("accessToken", res.accessToken);
-          localStorage.setItem("refreshToken", res.refreshToken)
+  // if (
+  //   !tokenRefreshInitiated && error.response.status === 401
+  //   && !originalRequest._retry
+  // ) {
+  //   originalRequest._retry = true;
+  //   tokenRefreshInitiated = true;
 
-          originalRequest.headers['Authorization'] = `Bearer ${res.accessToken}`;
-          return client(originalRequest);
-        }
-      })
-      .catch(err => {
-        console.error("Failed to refresh access token:", err.error_description);
-      })
-      .finally(() => {
-        tokenRefreshInitiated = false;
-      })
-    ;
-  }
+  //   return refreshAccessToken()
+  //     .then(res => {
+  //       accessToken = res.accessToken;
+  //     })
+  //     .finally(() => {
+  //       tokenRefreshInitiated = false;
+  //     })
+  //   ;
+  // }
 
   return Promise.reject(error);
 });

@@ -11,26 +11,34 @@ export const getAccessToken = (provider: OAuthProvider, assertion: string): Prom
     provider
   })
   .then((res: AxiosResponse<TokenResponse>) => {
+    const { accessToken } = res.data;
+    client.authorization = accessToken;
+
     return res.data;
-  })
-  .catch((err) => {
-    // Handle error case
-    return err;
   });
 }
 
-export const refreshAccessToken = (token: string): Promise<TokenResponse> => {
+export const refreshAccessToken = (): Promise<TokenResponse> => {
   return client.post("oauth/token", {
     client_id: process.env.NEXT_PUBLIC_API_CLIENT_ID,
     client_secret: process.env.NEXT_PUBLIC_API_CLIENT_SECRET,
-    grant_type: "refresh_token",
-    refresh_token: token
+    grant_type: "refresh_token"
   })
   .then((res: AxiosResponse<TokenResponse>) => {
+    const { accessToken } = res.data;
+    client.authorization = accessToken;
+
     return res.data;
+  });
+}
+
+export const revokeToken = (): Promise<void> => {
+  return client.post("oauth/revoke", {
+    client_id: process.env.NEXT_PUBLIC_API_CLIENT_ID,
+    client_secret: process.env.NEXT_PUBLIC_API_CLIENT_SECRET,
+    token: client.authorization
   })
-  .catch((err) => {
-    // Handle error case
-    return err;
+  .then(res => {
+    client.authorization = undefined;
   });
 }

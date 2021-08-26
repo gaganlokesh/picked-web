@@ -7,6 +7,6 @@ export interface TokenResponse {
   tokenType: TokenType
   expiresIn: number // seconds
   createdAt: number
-  refreshToken: string
+  refreshToken?: string
   scope?: string
 }

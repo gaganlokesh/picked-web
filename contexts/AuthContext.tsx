@@ -6,7 +6,8 @@ import React, {
   useMemo,
   useState
 } from "react";
-import { login, logout, githubSigninPopup, googleSigninPopup } from "../lib/auth";
+import { getAccessToken, refreshAccessToken, revokeToken } from "../api/auth";
+import { githubSigninPopup, googleSigninPopup } from "../lib/auth";
 import firebase from "../lib/firebase";
 import { OAuthProvider } from "../types/auth";
 
@@ -31,18 +32,26 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
   const [shouldOpenLoginModal, setShouldOpenLoginModal] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!!window.localStorage.getItem("accessToken")) {
-      setIsLoggedIn(true);
+    async function refreshAuth() {
+      try {
+        await refreshAccessToken();
+        setIsLoggedIn(true);
+      } catch (err) {
+        console.error(err);
+        setIsLoggedIn(false);
+      }
     }
+
+    refreshAuth();
   }, [])
 
   const handleAuthResponse = useCallback(
     (provider: OAuthProvider, res: firebase.auth.UserCredential) => {
       const credential = res.credential as firebase.auth.OAuthCredential;
-      return login(provider, credential.accessToken)
+      return getAccessToken(provider, credential.accessToken)
         .then(() => setIsLoggedIn(true));
     },
-    [setIsLoggedIn]
+    []
   )
 
   const loginWithGithub = useCallback(
@@ -61,12 +70,16 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
     [handleAuthResponse]
   )
 
-  const logoutFn = () => {
-    return logout()
-      .then(() => setIsLoggedIn(false));
+  const logout = () => {
+    return revokeToken()
+      .then(() => {
+        setIsLoggedIn(false);
+      })
+      .catch(err => console.error(err))
+    ;
   }
 
-  const value = useMemo(
+  const value: AuthContextData = useMemo(
     () => ({
       isLoggedIn,
       shouldOpenLoginModal,
@@ -74,7 +87,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
       closeLoginModal: () => setShouldOpenLoginModal(false),
       loginWithGithub,
       loginWithGoogle,
-      logout: logoutFn,
+      logout,
     }),
     [
       isLoggedIn,
