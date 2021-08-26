@@ -4,6 +4,7 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState
 } from "react";
 import { getAccessToken, refreshAccessToken, revokeToken } from "../api/auth";
@@ -30,22 +31,36 @@ interface AuthProviderProps {
 
 const AuthContext = React.createContext<AuthContextData>(null);
 
+const tokenTimeout = (expiresIn: number): number => (expiresIn - 10) * 1000;
+
 export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
   const [user, setUser] = useState<User>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [shouldOpenLoginModal, setShouldOpenLoginModal] = useState<boolean>(false);
 
-  useEffect(() => {
-    async function refreshAuth() {
+  const authRefreshTimer = useRef<NodeJS.Timeout>();
+
+  const refreshAuth = useCallback(
+    async (): Promise<void> => {
       try {
-        await refreshAccessToken();
+        const tokenResponse = await refreshAccessToken();
         setIsLoggedIn(true);
+
+        clearTimeout(authRefreshTimer.current);
+        authRefreshTimer.current = setTimeout(
+          refreshAuth,
+          tokenTimeout(tokenResponse.expiresIn)
+        );
       } catch (err) {
         console.error(err);
         setIsLoggedIn(false);
+        setUser(null);
       }
-    }
+    },
+    []
+  )
 
+  useEffect(() => {
     refreshAuth();
   }, [])
 
@@ -54,14 +69,22 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
       const credential = res.credential as firebase.auth.OAuthCredential;
 
       return getAccessToken(provider, credential.accessToken)
-        .then(() => getLoggedInUser())
+        .then(tokenResponse => {
+          // Set timer to refresh access token before it expires
+          authRefreshTimer.current = setTimeout(
+            refreshAuth,
+            tokenTimeout(tokenResponse.expiresIn)
+          );
+
+          return getLoggedInUser();
+        })
         .then((user: User) => {
           setIsLoggedIn(true);
           setUser(user);
         })
         .catch(err => console.error(err));
     },
-    []
+    [refreshAuth]
   )
 
   const loginWithGithub = useCallback(
@@ -85,6 +108,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
       .then(() => {
         setIsLoggedIn(false);
         setUser(null);
+        clearTimeout(authRefreshTimer.current);
       })
       .catch(err => console.error(err))
     ;
