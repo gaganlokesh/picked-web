@@ -7,11 +7,14 @@ import React, {
   useState
 } from "react";
 import { getAccessToken, refreshAccessToken, revokeToken } from "../api/auth";
+import { getLoggedInUser } from "../api/user";
 import { githubSigninPopup, googleSigninPopup } from "../lib/auth";
 import firebase from "../lib/firebase";
 import { OAuthProvider } from "../types/auth";
+import { User } from "../types/user";
 
 interface AuthContextData {
+  user: User;
   isLoggedIn: boolean;
   shouldOpenLoginModal: boolean;
   openLoginModal: () => void;
@@ -28,6 +31,7 @@ interface AuthProviderProps {
 const AuthContext = React.createContext<AuthContextData>(null);
 
 export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
+  const [user, setUser] = useState<User>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [shouldOpenLoginModal, setShouldOpenLoginModal] = useState<boolean>(false);
 
@@ -48,8 +52,14 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
   const handleAuthResponse = useCallback(
     (provider: OAuthProvider, res: firebase.auth.UserCredential) => {
       const credential = res.credential as firebase.auth.OAuthCredential;
+
       return getAccessToken(provider, credential.accessToken)
-        .then(() => setIsLoggedIn(true));
+        .then(() => getLoggedInUser())
+        .then((user: User) => {
+          setIsLoggedIn(true);
+          setUser(user);
+        })
+        .catch(err => console.error(err));
     },
     []
   )
@@ -74,6 +84,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
     return revokeToken()
       .then(() => {
         setIsLoggedIn(false);
+        setUser(null);
       })
       .catch(err => console.error(err))
     ;
@@ -81,6 +92,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
 
   const value: AuthContextData = useMemo(
     () => ({
+      user,
       isLoggedIn,
       shouldOpenLoginModal,
       openLoginModal: () => setShouldOpenLoginModal(true),
@@ -90,6 +102,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
       logout,
     }),
     [
+      user,
       isLoggedIn,
       shouldOpenLoginModal,
       loginWithGithub,
