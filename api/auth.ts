@@ -5,7 +5,6 @@ import client from "./client";
 export const getAccessToken = (provider: OAuthProvider, assertion: string): Promise<TokenResponse> => {
   return client.post("oauth/token", {
     client_id: process.env.NEXT_PUBLIC_API_CLIENT_ID,
-    client_secret: process.env.NEXT_PUBLIC_API_CLIENT_SECRET,
     grant_type: "assertion",
     assertion,
     provider
@@ -21,7 +20,6 @@ export const getAccessToken = (provider: OAuthProvider, assertion: string): Prom
 export const refreshAccessToken = (): Promise<TokenResponse> => {
   return client.post("oauth/token", {
     client_id: process.env.NEXT_PUBLIC_API_CLIENT_ID,
-    client_secret: process.env.NEXT_PUBLIC_API_CLIENT_SECRET,
     grant_type: "refresh_token"
   })
   .then((res: AxiosResponse<TokenResponse>) => {
@@ -35,7 +33,6 @@ export const refreshAccessToken = (): Promise<TokenResponse> => {
 export const revokeToken = (): Promise<void> => {
   return client.post("oauth/revoke", {
     client_id: process.env.NEXT_PUBLIC_API_CLIENT_ID,
-    client_secret: process.env.NEXT_PUBLIC_API_CLIENT_SECRET,
     token: client.authorization
   })
   .then(res => {
