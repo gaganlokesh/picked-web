@@ -71,6 +71,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
     (provider: OAuthProvider, res: firebase.auth.UserCredential) => {
       const credential = res.credential as firebase.auth.OAuthCredential;
 
+      // Request access token from API server using Firebase auth credential
       return getAccessToken(provider, credential.accessToken)
         .then(tokenResponse => {
           // Set timer to refresh access token before it expires
