@@ -31,9 +31,6 @@ const ArticleCard = (props: ArticleProps): JSX.Element => {
             height={145}
             layout="responsive"
             className="rounded"
-            // FIXME: Temporarily turning off image optimization as a workaround for NodeJS 16 segmentation issue in next/image package.
-            // Refer https://github.com/vercel/next.js/issues/24421
-            unoptimized={true}
           />
         </div>
         <div className="pl-4 col-span-9">
