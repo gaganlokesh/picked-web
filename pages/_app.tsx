@@ -7,6 +7,7 @@ import LoginModal from '../components/LoginModal';
 
 function Layout({ Component, pageProps }: AppProps): ReactElement {
   const {
+    loading,
     isLoggedIn,
     shouldOpenLoginModal,
     openLoginModal,
@@ -17,19 +18,20 @@ function Layout({ Component, pageProps }: AppProps): ReactElement {
   return (
     <>
       <header>
-        {isLoggedIn ? (
-          <button
-            className="text-md ml-auto uppercase"
-            onClick={logout}
-          >
-            Logout
-          </button>
-        ) : (
+        {!loading && !isLoggedIn && (
           <button
             className="text-md ml-auto uppercase"
             onClick={openLoginModal}
           >
             Login
+          </button>
+        )}
+        {isLoggedIn && (
+          <button
+            className="text-md ml-auto uppercase"
+            onClick={logout}
+          >
+            Logout
           </button>
         )}
       </header>

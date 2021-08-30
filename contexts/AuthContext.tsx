@@ -16,6 +16,7 @@ import { User } from "../types/user";
 
 interface AuthContextData {
   user: User;
+  loading: boolean;
   isLoggedIn: boolean;
   shouldOpenLoginModal: boolean;
   openLoginModal: () => void;
@@ -35,6 +36,7 @@ const tokenTimeout = (expiresIn: number): number => (expiresIn - 10) * 1000;
 
 export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
   const [user, setUser] = useState<User>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [shouldOpenLoginModal, setShouldOpenLoginModal] = useState<boolean>(false);
 
@@ -61,7 +63,8 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
   )
 
   useEffect(() => {
-    refreshAuth();
+    refreshAuth()
+      .finally(() => setLoading(false));
   }, [])
 
   const handleAuthResponse = useCallback(
@@ -82,13 +85,17 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
           setIsLoggedIn(true);
           setUser(user);
         })
-        .catch(err => console.error(err));
+        .catch(err => console.error(err))
+        .finally(() => {
+          setLoading(false);
+        });
     },
     [refreshAuth]
   )
 
   const loginWithGithub = useCallback(
     () => {
+      setLoading(true);
       return githubSigninPopup()
         .then(res => handleAuthResponse('github', res));
     },
@@ -97,6 +104,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
 
   const loginWithGoogle = useCallback(
     () => {
+      setLoading(true);
       return googleSigninPopup()
         .then(res => handleAuthResponse('google', res));
     },
@@ -117,6 +125,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
   const value: AuthContextData = useMemo(
     () => ({
       user,
+      loading,
       isLoggedIn,
       shouldOpenLoginModal,
       openLoginModal: () => setShouldOpenLoginModal(true),
@@ -127,6 +136,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
     }),
     [
       user,
+      loading,
       isLoggedIn,
       shouldOpenLoginModal,
       loginWithGithub,
