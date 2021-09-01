@@ -33,9 +33,9 @@ const Feed = (): ReactElement => {
 
   useEffect(() => {
     if (inView) {
-      setSize(size + 1);
+      setSize((prevSize) => prevSize + 1);
     }
-  }, [inView])
+  }, [inView, setSize])
 
   return (
     <>
