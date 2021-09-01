@@ -5,14 +5,14 @@ import React, {
   useEffect,
   useMemo,
   useRef,
-  useState
-} from "react";
-import { getAccessToken, refreshAccessToken, revokeToken } from "../api/auth";
-import { getLoggedInUser } from "../api/user";
-import { githubSigninPopup, googleSigninPopup } from "../lib/auth";
-import firebase from "../lib/firebase";
-import { OAuthProvider } from "../types/auth";
-import { User } from "../types/user";
+  useState,
+} from 'react';
+import { getAccessToken, refreshAccessToken, revokeToken } from '../api/auth';
+import { getLoggedInUser } from '../api/user';
+import { githubSigninPopup, googleSigninPopup } from '../lib/auth';
+import firebase from '../lib/firebase';
+import { OAuthProvider } from '../types/auth';
+import { User } from '../types/user';
 
 interface AuthContextData {
   user: User;
@@ -38,34 +38,31 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
   const [user, setUser] = useState<User>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [shouldOpenLoginModal, setShouldOpenLoginModal] = useState<boolean>(false);
+  const [shouldOpenLoginModal, setShouldOpenLoginModal] =
+    useState<boolean>(false);
 
   const authRefreshTimer = useRef<NodeJS.Timeout>();
 
-  const refreshAuth = useCallback(
-    async (): Promise<void> => {
-      try {
-        const tokenResponse = await refreshAccessToken();
-        setIsLoggedIn(true);
+  const refreshAuth = useCallback(async (): Promise<void> => {
+    try {
+      const tokenResponse = await refreshAccessToken();
+      setIsLoggedIn(true);
 
-        clearTimeout(authRefreshTimer.current);
-        authRefreshTimer.current = setTimeout(
-          refreshAuth,
-          tokenTimeout(tokenResponse.expiresIn)
-        );
-      } catch (err) {
-        console.error(err);
-        setIsLoggedIn(false);
-        setUser(null);
-      }
-    },
-    []
-  )
+      clearTimeout(authRefreshTimer.current);
+      authRefreshTimer.current = setTimeout(
+        refreshAuth,
+        tokenTimeout(tokenResponse.expiresIn)
+      );
+    } catch (err) {
+      console.error(err);
+      setIsLoggedIn(false);
+      setUser(null);
+    }
+  }, []);
 
   useEffect(() => {
-    refreshAuth()
-      .finally(() => setLoading(false));
-  }, [])
+    refreshAuth().finally(() => setLoading(false));
+  }, []);
 
   const handleAuthResponse = useCallback(
     (provider: OAuthProvider, res: firebase.auth.UserCredential) => {
@@ -73,7 +70,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
 
       // Request access token from API server using Firebase auth credential
       return getAccessToken(provider, credential.accessToken)
-        .then(tokenResponse => {
+        .then((tokenResponse) => {
           // Set timer to refresh access token before it expires
           authRefreshTimer.current = setTimeout(
             refreshAuth,
@@ -86,31 +83,23 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
           setIsLoggedIn(true);
           setUser(user);
         })
-        .catch(err => console.error(err))
+        .catch((err) => console.error(err))
         .finally(() => {
           setLoading(false);
         });
     },
     [refreshAuth]
-  )
+  );
 
-  const loginWithGithub = useCallback(
-    () => {
-      setLoading(true);
-      return githubSigninPopup()
-        .then(res => handleAuthResponse('github', res));
-    },
-    [handleAuthResponse]
-  )
+  const loginWithGithub = useCallback(() => {
+    setLoading(true);
+    return githubSigninPopup().then((res) => handleAuthResponse('github', res));
+  }, [handleAuthResponse]);
 
-  const loginWithGoogle = useCallback(
-    () => {
-      setLoading(true);
-      return googleSigninPopup()
-        .then(res => handleAuthResponse('google', res));
-    },
-    [handleAuthResponse]
-  )
+  const loginWithGoogle = useCallback(() => {
+    setLoading(true);
+    return googleSigninPopup().then((res) => handleAuthResponse('google', res));
+  }, [handleAuthResponse]);
 
   const logout = () => {
     return revokeToken()
@@ -119,9 +108,8 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
         setUser(null);
         clearTimeout(authRefreshTimer.current);
       })
-      .catch(err => console.error(err))
-    ;
-  }
+      .catch((err) => console.error(err));
+  };
 
   const value: AuthContextData = useMemo(
     () => ({
@@ -141,22 +129,18 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
       isLoggedIn,
       shouldOpenLoginModal,
       loginWithGithub,
-      loginWithGoogle
+      loginWithGoogle,
     ]
-  )
+  );
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  )
-}
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
 
 export const useAuth = () => {
   const context = React.useContext(AuthContext);
   if (context === undefined) {
-    throw new Error(`useAuth must be used within a AuthProvider`)
+    throw new Error(`useAuth must be used within a AuthProvider`);
   }
 
   return context;
-}
+};

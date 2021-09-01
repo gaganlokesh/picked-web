@@ -1,7 +1,7 @@
-import '../styles/globals.css'
+import '../styles/globals.css';
 
-import { ReactElement } from 'react'
-import type { AppProps } from 'next/app'
+import { ReactElement } from 'react';
+import type { AppProps } from 'next/app';
 import { AuthProvider, useAuth } from '../contexts/AuthContext';
 import LoginModal from '../components/LoginModal';
 
@@ -12,7 +12,7 @@ function Layout({ Component, pageProps }: AppProps): ReactElement {
     shouldOpenLoginModal,
     openLoginModal,
     closeLoginModal,
-    logout
+    logout,
   } = useAuth();
 
   return (
@@ -27,10 +27,7 @@ function Layout({ Component, pageProps }: AppProps): ReactElement {
           </button>
         )}
         {isLoggedIn && (
-          <button
-            className="text-md ml-auto uppercase"
-            onClick={logout}
-          >
+          <button className="text-md ml-auto uppercase" onClick={logout}>
             Logout
           </button>
         )}
@@ -39,13 +36,10 @@ function Layout({ Component, pageProps }: AppProps): ReactElement {
       <Component {...pageProps} />
 
       {!isLoggedIn && (
-        <LoginModal
-          open={shouldOpenLoginModal}
-          onClose={closeLoginModal}
-        />
+        <LoginModal open={shouldOpenLoginModal} onClose={closeLoginModal} />
       )}
     </>
-  )
+  );
 }
 
 function MyApp(props: AppProps): ReactElement {
@@ -53,7 +47,7 @@ function MyApp(props: AppProps): ReactElement {
     <AuthProvider>
       <Layout {...props} />
     </AuthProvider>
-  )
+  );
 }
 
-export default MyApp
+export default MyApp;

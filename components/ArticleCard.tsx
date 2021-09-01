@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { Article } from '../types/article';
 
 interface ArticleProps {
-  article: Article
+  article: Article;
 }
 
 const ArticleCard = (props: ArticleProps): JSX.Element => {
@@ -16,7 +16,7 @@ const ArticleCard = (props: ArticleProps): JSX.Element => {
     }
 
     return instance.format('D MMM');
-  }
+  };
 
   return (
     <>
@@ -34,7 +34,9 @@ const ArticleCard = (props: ArticleProps): JSX.Element => {
           />
         </div>
         <div className="pl-4 col-span-9">
-          <div className="text-xs md:text-sm font-medium text-pink-600 uppercase">{article?.source.name}</div>
+          <div className="text-xs md:text-sm font-medium text-pink-600 uppercase">
+            {article?.source.name}
+          </div>
           <h3 className="font-bold leading-tight md:leading-normal">
             <a href={article.url}>{article.title}</a>
           </h3>
@@ -50,7 +52,7 @@ const ArticleCard = (props: ArticleProps): JSX.Element => {
         </div>
       </article>
     </>
-  )
-}
+  );
+};
 
 export default ArticleCard;

@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode } from "react";
+import { ReactElement, ReactNode } from 'react';
 
 interface SocialLoginProps {
   icon: ReactNode;
@@ -6,7 +6,11 @@ interface SocialLoginProps {
   onClick: () => void;
 }
 
-const SocialLoginButton = ({ icon, text, onClick }: SocialLoginProps): ReactElement => {
+const SocialLoginButton = ({
+  icon,
+  text,
+  onClick,
+}: SocialLoginProps): ReactElement => {
   return (
     <button
       className="inline-flex py-3 px-4 m-1 border-2 rounded-md"
@@ -15,7 +19,7 @@ const SocialLoginButton = ({ icon, text, onClick }: SocialLoginProps): ReactElem
       {icon}
       <span className="ml-4 font-medium">{text}</span>
     </button>
-  )
-}
+  );
+};
 
 export default SocialLoginButton;

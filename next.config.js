@@ -2,7 +2,7 @@ module.exports = {
   webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/,
-      use: ["@svgr/webpack"]
+      use: ['@svgr/webpack'],
     });
 
     return config;
@@ -10,9 +10,9 @@ module.exports = {
   images: {
     domains: [
       // Development
-      "picked-dev.s3.ap-south-1.amazonaws.com",
-      "loremflickr.com",
+      'picked-dev.s3.ap-south-1.amazonaws.com',
+      'loremflickr.com',
     ],
   },
   reactStrictMode: true,
-}
+};

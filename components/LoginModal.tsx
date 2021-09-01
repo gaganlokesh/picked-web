@@ -1,10 +1,10 @@
-import { Dialog } from "@headlessui/react";
-import { ReactElement } from "react";
-import { useAuth } from "../contexts/AuthContext";
-import SocialLoginButton from "./SocialLoginButton";
-import GithubLogo from "../public/icons/github.svg";
-import GoogleLogo from "../public/icons/google.svg";
-import TimesIcon from "../public/icons/times.svg";
+import { Dialog } from '@headlessui/react';
+import { ReactElement } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import SocialLoginButton from './SocialLoginButton';
+import GithubLogo from '../public/icons/github.svg';
+import GoogleLogo from '../public/icons/google.svg';
+import TimesIcon from '../public/icons/times.svg';
 
 interface ModalProps {
   open: boolean;
@@ -38,31 +38,33 @@ const LoginModal = ({ open, onClose }: ModalProps): ReactElement => {
               className="ml-auto cursor-pointer"
               onClick={onClose}
             />
-            <Dialog.Title className="font-medium">
-              Login
-            </Dialog.Title>
+            <Dialog.Title className="font-medium">Login</Dialog.Title>
             <Dialog.Description className="mt-2">
               Join the community of developers and explore unlimited content
             </Dialog.Description>
 
             <div className="text-center mt-4">
               <SocialLoginButton
-                icon={<GoogleLogo/>}
-                text={"Sign in with Google"}
+                icon={<GoogleLogo />}
+                text={'Sign in with Google'}
                 onClick={loginWithGoogle}
               />
 
               <SocialLoginButton
-                icon={<GithubLogo/>}
-                text={"Sign in with Github"}
+                icon={<GithubLogo />}
+                text={'Sign in with Github'}
                 onClick={loginWithGithub}
               />
 
               <p className="mt-5 text-sm">
                 By signing up you agree with our&nbsp;
-                <a href="#" className="underline">Terms of Service</a>&nbsp;
-                and&nbsp;
-                <a href="#" className="underline">Privacy Policy</a>
+                <a href="#" className="underline">
+                  Terms of Service
+                </a>
+                &nbsp; and&nbsp;
+                <a href="#" className="underline">
+                  Privacy Policy
+                </a>
                 .
               </p>
             </div>
@@ -70,7 +72,7 @@ const LoginModal = ({ open, onClose }: ModalProps): ReactElement => {
         </div>
       </Dialog>
     </>
-  )
-}
+  );
+};
 
 export default LoginModal;

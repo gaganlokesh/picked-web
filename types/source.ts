@@ -1,7 +1,7 @@
 export interface Source {
-  id: number
-  slug: string
-  name: string
-  websiteUrl: string
-  feedUrl?: string
+  id: number;
+  slug: string;
+  name: string;
+  websiteUrl: string;
+  feedUrl?: string;
 }
