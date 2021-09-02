@@ -1,6 +1,6 @@
 import { ReactElement, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { useSWRInfinite } from 'swr';
+import useSWRInfinite from 'swr/infinite';
 import fetcher from '../api/fetcher';
 import { Article } from '../types/article';
 import ArticleCard from './ArticleCard';
