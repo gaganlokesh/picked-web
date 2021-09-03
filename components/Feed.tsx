@@ -52,13 +52,11 @@ const Feed = ({ requestUrl }: FeedProps): ReactElement => {
 
   return (
     <>
-      <div className="grid grid-cols-12">
-        <div className="col-span-12 md:col-span-8">
-          {articles.map((article) => (
-            <ArticleCard key={article.id} article={article} />
-          ))}
-          <div ref={inViewRef}>{!isReachingEnd && <FeedLoader />}</div>
-        </div>
+      <div>
+        {articles.map((article) => (
+          <ArticleCard key={article.id} article={article} />
+        ))}
+        <div ref={inViewRef}>{!isReachingEnd && <FeedLoader />}</div>
       </div>
     </>
   );
