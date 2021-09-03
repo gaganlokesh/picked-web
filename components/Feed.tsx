@@ -6,12 +6,21 @@ import { Article } from '../types/article';
 import ArticleCard from './ArticleCard';
 import ArticleLoader from './ArticleLoader';
 
+interface FeedProps {
+  requestUrl: string;
+}
+
 const PAGE_SIZE = 15;
 
-const getKey = (pageIndex, prevPageData): string => {
+const generateFeedKey = (
+  requestUrl: string,
+  pageIndex: number,
+  prevPageData
+): string => {
+  if (!requestUrl) return null;
   if (prevPageData && !prevPageData.length) return null;
 
-  return `/articles?per_page=${PAGE_SIZE}&page=${pageIndex + 1}`;
+  return `${requestUrl}?per_page=${PAGE_SIZE}&page=${pageIndex + 1}`;
 };
 
 const FeedLoader = (): ReactElement => (
@@ -24,9 +33,12 @@ const FeedLoader = (): ReactElement => (
   </>
 );
 
-const Feed = (): ReactElement => {
-  const { data, error, size, setSize } = useSWRInfinite(getKey, fetcher);
-  const { ref: inViewRef, inView, entry } = useInView();
+const Feed = ({ requestUrl }: FeedProps): ReactElement => {
+  const { data, error, setSize } = useSWRInfinite(
+    (...args) => generateFeedKey(requestUrl, ...args),
+    fetcher
+  );
+  const { ref: inViewRef, inView } = useInView();
   const articles: Article[] = data ? [].concat(...data) : [];
   const isEmpty: boolean = data?.[0]?.length === 0;
   const isReachingEnd: boolean =
