@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Article } from '../types/article';
 
 interface ArticleProps {
@@ -18,7 +19,7 @@ const ArticleCard = (props: ArticleProps): JSX.Element => {
 
   return (
     <>
-      <article className="px-3 py-4 grid grid-cols-12">
+      <article className="grid grid-cols-12 py-4">
         <div className="col-span-3">
           <Image
             src={article.imageUrl}
@@ -32,9 +33,16 @@ const ArticleCard = (props: ArticleProps): JSX.Element => {
           />
         </div>
         <div className="pl-4 col-span-9">
-          <div className="text-xs md:text-sm font-medium text-pink-600 uppercase">
-            {article?.source.name}
-          </div>
+          <Link
+            href={{
+              pathname: '/sources/[slug]',
+              query: { slug: article?.source.slug },
+            }}
+          >
+            <a className="text-xs md:text-sm font-medium text-pink-600 tracking-widest uppercase">
+              {article?.source.name}
+            </a>
+          </Link>
           <h3 className="font-bold leading-tight md:leading-normal">
             <a href={article.url}>{article.title}</a>
           </h3>
