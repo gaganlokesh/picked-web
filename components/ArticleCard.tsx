@@ -6,17 +6,15 @@ interface ArticleProps {
   article: Article;
 }
 
+const formatDate = (date: Date): string => {
+  const instance = dayjs(date);
+  const template = instance.year() !== dayjs().year() ? 'D MMM, YYYY' : 'D MMM';
+
+  return instance.format(template);
+};
+
 const ArticleCard = (props: ArticleProps): JSX.Element => {
   const { article } = props;
-
-  const formatDate = (date: Date): string => {
-    const instance = dayjs(date);
-    if (instance.year() !== dayjs().year()) {
-      return instance.format('D MMM, YYYY');
-    }
-
-    return instance.format('D MMM');
-  };
 
   return (
     <>
