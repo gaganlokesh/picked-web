@@ -4,6 +4,7 @@ import { ReactElement, ReactNode } from 'react';
 import { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
+import { SWRConfig } from 'swr';
 import { AuthProvider, useAuth } from '../contexts/AuthContext';
 import LoginModal from '../components/LoginModal';
 import Header from '../components/Header';
@@ -40,10 +41,16 @@ function Layout({ Component, pageProps }: AppPropsWithLayout): ReactElement {
 }
 
 function MyApp(props: AppPropsWithLayout): ReactElement {
+  const swrConfig = {
+    revalidateOnFocus: false,
+  };
+
   return (
-    <AuthProvider>
-      <Layout {...props} />
-    </AuthProvider>
+    <SWRConfig value={swrConfig}>
+      <AuthProvider>
+        <Layout {...props} />
+      </AuthProvider>
+    </SWRConfig>
   );
 }
 
