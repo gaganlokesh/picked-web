@@ -34,21 +34,22 @@ const FeedLoader = (): ReactElement => (
 );
 
 const Feed = ({ requestUrl }: FeedProps): ReactElement => {
-  const { data, error, setSize } = useSWRInfinite(
+  const { ref: inViewRef, inView } = useInView();
+  const { data, setSize, isValidating } = useSWRInfinite(
     (...args) => generateFeedKey(requestUrl, ...args),
     fetcher
   );
-  const { ref: inViewRef, inView } = useInView();
+
   const articles: Article[] = data ? [].concat(...data) : [];
   const isEmpty: boolean = data?.[0]?.length === 0;
   const isReachingEnd: boolean =
     isEmpty || (data && data[data.length - 1]?.length < PAGE_SIZE);
 
   useEffect(() => {
-    if (inView) {
+    if (inView && !isValidating) {
       setSize((prevSize) => prevSize + 1);
     }
-  }, [inView, setSize]);
+  }, [inView]);
 
   return (
     <>
