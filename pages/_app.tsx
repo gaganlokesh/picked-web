@@ -43,6 +43,7 @@ function Layout({ Component, pageProps }: AppPropsWithLayout): ReactElement {
 function MyApp(props: AppPropsWithLayout): ReactElement {
   const swrConfig = {
     revalidateOnFocus: false,
+    errorRetryCount: 3,
   };
 
   return (
