@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useAuth } from '../contexts/AuthContext';
 
 const Header = (): ReactElement => {
-  const { loading, isLoggedIn, openLoginModal, logout } = useAuth();
+  const { isReady, isLoggedIn, openLoginModal, logout } = useAuth();
 
   return (
     <>
@@ -14,7 +14,7 @@ const Header = (): ReactElement => {
               <Link href="/">🚀 HOME</Link>
             </div>
             <div className="flex-initial">
-              {!loading && !isLoggedIn && (
+              {isReady && !isLoggedIn && (
                 <button
                   className="text-md ml-auto uppercase"
                   onClick={openLoginModal}
