@@ -19,8 +19,8 @@ interface AuthContextData {
   user: User;
   /** The "initial" token request has completed and login state is known */
   isReady: boolean;
-  /** The login process has started and the OAuth handshake is in-progress */
-  loading: boolean;
+  /** New user login process has started and the OAuth handshake is in-progress */
+  isLoading: boolean;
   isLoggedIn: boolean;
   shouldOpenLoginModal: boolean;
   openLoginModal: () => void;
@@ -42,7 +42,7 @@ const TOKEN_REFRESH_INTERVAL = ((30 * 60) - 10) * 1000;
 export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
   const [user, setUser] = useState<User>(null);
   const [isReady, setIsReady] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [shouldOpenLoginModal, setShouldOpenLoginModal] =
     useState<boolean>(false);
@@ -91,21 +91,21 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
   );
 
   const loginWithGithub = useCallback(() => {
-    setLoading(true);
+    setIsLoading(true);
 
     return githubSigninPopup()
       .then((res) => handleFirebaseAuthResponse('github', res))
       .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, [handleFirebaseAuthResponse]);
 
   const loginWithGoogle = useCallback(() => {
-    setLoading(true);
+    setIsLoading(true);
 
     return googleSigninPopup()
       .then((res) => handleFirebaseAuthResponse('google', res))
       .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, [handleFirebaseAuthResponse]);
 
   const logout = () => {
@@ -121,7 +121,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
     () => ({
       user,
       isReady,
-      loading,
+      isLoading,
       isLoggedIn,
       shouldOpenLoginModal,
       openLoginModal: () => setShouldOpenLoginModal(true),
@@ -133,7 +133,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
     [
       user,
       isReady,
-      loading,
+      isLoading,
       isLoggedIn,
       shouldOpenLoginModal,
       loginWithGithub,
