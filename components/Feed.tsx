@@ -40,7 +40,7 @@ const Feed = ({ requestUrl }: FeedProps): ReactElement => {
     fetcher
   );
 
-  const articles: Article[] = data ? [].concat(...data) : [];
+  const articles: Article[] = data?.length ? [].concat(...data) : [];
   const isEmpty: boolean = data?.[0]?.length === 0;
   const isReachingEnd: boolean =
     isEmpty || (data && data[data.length - 1]?.length < PAGE_SIZE);
