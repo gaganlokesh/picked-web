@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React, {
   ReactElement,
   ReactNode,
@@ -40,6 +41,8 @@ const AuthContext = React.createContext<AuthContextData>(null);
 const TOKEN_REFRESH_INTERVAL = ((30 * 60) - 10) * 1000;
 
 export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
+  const router = useRouter();
+
   const [user, setUser] = useState<User>(null);
   const [isReady, setIsReady] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -108,14 +111,16 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
       .finally(() => setIsLoading(false));
   }, [handleFirebaseAuthResponse]);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     return revokeToken()
       .then(() => {
         setIsLoggedIn(false);
         setUser(null);
+
+        router.reload();
       })
       .catch((err) => console.error(err));
-  };
+  }, [router]);
 
   const value: AuthContextData = useMemo(
     () => ({
@@ -138,6 +143,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
       shouldOpenLoginModal,
       loginWithGithub,
       loginWithGoogle,
+      logout,
     ]
   );
 
