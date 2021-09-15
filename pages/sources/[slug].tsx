@@ -45,9 +45,11 @@ const SourcePage = (): ReactElement => {
                   className="rounded"
                 />
                 <h1 className="mt-5 text-5xl text-gray-800">{source?.name}</h1>
-                <p className="mt-5 text-xl text-gray-600">
-                  How hackers start their afternoons.
-                </p>
+                {source.description && (
+                  <p className="mt-5 text-xl text-gray-600">
+                    {source.description}
+                  </p>
+                )}
               </div>
               <div className="flex justify-between mt-8">
                 <div className="flex">
