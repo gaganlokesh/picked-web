@@ -4,5 +4,7 @@ export interface Source {
   name: string;
   imageUrl: string;
   websiteUrl: string;
+  followersCount?: number;
+  isFollowing?: boolean;
   feedUrl?: string;
 }

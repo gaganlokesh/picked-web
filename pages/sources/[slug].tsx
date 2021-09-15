@@ -7,14 +7,28 @@ import Feed from '../../components/Feed';
 import { Source } from '../../types/source';
 import TwitterLogo from '../../public/icons/twitter.svg';
 import LinkIcon from '../../public/icons/link.svg';
+import { useAuth } from '../../contexts/AuthContext';
+import { followSource, unfollowSource } from '../../api/source';
 
 const SourcePage = (): ReactElement => {
   const router = useRouter();
+  const { isReady, isLoggedIn, openLoginModal } = useAuth();
   const { slug } = router.query;
-  const { data: source, error } = useSWR<Source>(
-    slug ? `/sources/${slug}` : null,
+  const { data: source, mutate: updateSource } = useSWR<Source>(
+    slug && isReady ? `/sources/${slug}` : null,
     fetcher
   );
+
+  const handleFollowClick = () => {
+    if (!isLoggedIn) {
+      openLoginModal();
+    } else {
+      const updateFollow = source.isFollowing ? unfollowSource : followSource;
+      updateFollow(source?.slug).then(() => {
+        updateSource();
+      });
+    }
+  };
 
   return (
     <>
@@ -57,8 +71,12 @@ const SourcePage = (): ReactElement => {
                   </a>
                 </div>
                 <div>
-                  <span className="text-lg">160 followers</span>
-                  <button className="ml-4">FOLLOW</button>
+                  <span className="text-lg">
+                    {source.followersCount + ' followers'}
+                  </span>
+                  <button onClick={handleFollowClick} className="ml-4">
+                    {source.isFollowing ? 'FOLLOWING' : 'FOLLOW'}
+                  </button>
                 </div>
               </div>
             </>
