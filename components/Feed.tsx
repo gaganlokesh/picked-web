@@ -1,13 +1,22 @@
-import { ReactElement, useEffect } from 'react';
+import { ReactElement, useCallback, useEffect, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useSWRInfinite } from 'swr';
+import produce from 'immer';
 import fetcher from '../api/fetcher';
+import { addBookmark, removeBookmark } from '../api/article';
 import { Article } from '../types/article';
 import ArticleCard from './ArticleCard';
 import ArticleLoader from './ArticleLoader';
+import FeedItem from './FeedItem';
 
 interface FeedProps {
   requestUrl: string;
+}
+
+interface FeedItem {
+  article: Article;
+  page: number;
+  index: number;
 }
 
 const PAGE_SIZE = 15;
@@ -35,12 +44,25 @@ const FeedLoader = (): ReactElement => (
 
 const Feed = ({ requestUrl }: FeedProps): ReactElement => {
   const { ref: inViewRef, inView } = useInView();
-  const { data, setSize, isValidating } = useSWRInfinite(
+  const { data, setSize, isValidating, mutate } = useSWRInfinite<Article[]>(
     (...args) => generateFeedKey(requestUrl, ...args),
     fetcher
   );
 
-  const articles: Article[] = data?.length ? [].concat(...data) : [];
+  const feedItems = useMemo<FeedItem[]>(() => {
+    if (!data || data?.length === 0) return [];
+
+    return data.flatMap((items: Article[], page) => {
+      return items.map(
+        (article, index): FeedItem => ({
+          article,
+          page,
+          index,
+        })
+      );
+    });
+  }, [data]);
+
   const isEmpty: boolean = data?.[0]?.length === 0;
   const isReachingEnd: boolean =
     isEmpty || (data && data[data.length - 1]?.length < PAGE_SIZE);
@@ -51,11 +73,36 @@ const Feed = ({ requestUrl }: FeedProps): ReactElement => {
     }
   }, [inView]);
 
+  const handleBookmarkClick = (
+    article: Article,
+    page: number,
+    index: number
+  ) => {
+    const pages = data;
+    const newPages = produce(data, (draft) => {
+      draft[page][index].isBookmarked = !article.isBookmarked;
+    });
+    const updateBookmark = !article.isBookmarked ? addBookmark : removeBookmark;
+
+    // Optimistic UI update
+    mutate(newPages, false);
+
+    updateBookmark(article.id).catch((err) => {
+      console.error(err);
+      // Rollback to previous state on failure
+      mutate(pages, false);
+    });
+  };
+
   return (
     <>
       <div>
-        {articles.map((article) => (
-          <ArticleCard key={article.id} article={article} />
+        {feedItems.map(({ article, page, index }) => (
+          <ArticleCard
+            key={article?.id}
+            article={article}
+            onBookmarkClick={() => handleBookmarkClick(article, page, index)}
+          />
         ))}
         <div ref={inViewRef}>{!isReachingEnd && <FeedLoader />}</div>
       </div>

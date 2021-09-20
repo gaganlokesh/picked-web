@@ -5,6 +5,7 @@ import { Article } from '../types/article';
 
 interface ArticleProps {
   article: Article;
+  onBookmarkClick: () => void;
 }
 
 const formatDate = (date: Date): string => {
@@ -14,9 +15,10 @@ const formatDate = (date: Date): string => {
   return instance.format(template);
 };
 
-const ArticleCard = (props: ArticleProps): JSX.Element => {
-  const { article } = props;
-
+const ArticleCard = ({
+  article,
+  onBookmarkClick,
+}: ArticleProps): JSX.Element => {
   return (
     <>
       <article className="grid grid-cols-12 py-4">
@@ -55,6 +57,9 @@ const ArticleCard = (props: ArticleProps): JSX.Element => {
               </>
             )}
           </div>
+          <a onClick={onBookmarkClick}>
+            {!article.isBookmarked ? 'BOOKMARK' : 'REMOVE'}
+          </a>
         </div>
       </article>
     </>

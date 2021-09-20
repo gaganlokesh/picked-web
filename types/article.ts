@@ -11,4 +11,5 @@ export interface Article {
   imagePlaceholder?: string;
   readTime?: number;
   source?: Source;
+  isBookmarked?: boolean;
 }
