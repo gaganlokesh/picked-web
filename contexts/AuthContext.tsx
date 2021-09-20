@@ -50,9 +50,17 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
   const [shouldOpenLoginModal, setShouldOpenLoginModal] =
     useState<boolean>(false);
 
-  const { data: authData, mutate: refreshAuth } = useSWR(
+  const { mutate: refreshAuth } = useSWR(
     'refresh_token',
-    () => refreshAccessToken().finally(() => setIsReady(true)),
+    () => {
+      /**
+       * TODO: Both `isLoggedIn` and `isReady` state updates should be batched to avoid re-renders.
+       * Upgrading to React 18 should fix this.(https://github.com/reactwg/react-18/discussions/21)
+       */
+      return refreshAccessToken()
+        .then(() => setIsLoggedIn(true))
+        .finally(() => setIsReady(true));
+    },
     {
       shouldRetryOnError: false,
       refreshInterval: TOKEN_REFRESH_INTERVAL,
@@ -63,12 +71,6 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
     isLoggedIn ? '/users/me' : null,
     getLoggedInUser
   );
-
-  useEffect(() => {
-    if (!isLoggedIn && authData?.accessToken) {
-      setIsLoggedIn(true);
-    }
-  }, [authData]);
 
   useEffect(() => {
     if (!user && userData) {
