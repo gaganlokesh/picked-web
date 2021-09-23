@@ -1,6 +1,6 @@
 import { ReactElement, useCallback, useEffect, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { useSWRInfinite } from 'swr';
+import useSWRInfinite from 'swr/infinite';
 import produce from 'immer';
 import fetcher from '../api/fetcher';
 import { addBookmark, removeBookmark } from '../api/article';
