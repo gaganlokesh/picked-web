@@ -73,26 +73,32 @@ const Feed = ({ requestUrl }: FeedProps): ReactElement => {
     }
   }, [inView]);
 
-  const handleBookmarkClick = (
-    article: Article,
-    page: number,
-    index: number
-  ) => {
-    const pages = data;
-    const newPages = produce(data, (draft) => {
-      draft[page][index].isBookmarked = !article.isBookmarked;
-    });
-    const updateBookmark = !article.isBookmarked ? addBookmark : removeBookmark;
+  const handleBookmarkClick = useCallback(
+    (
+      articleId: number,
+      page: number,
+      index: number,
+      shouldBookmark: boolean
+    ) => {
+      const pages = data;
+      const updateBookmark = shouldBookmark ? addBookmark : removeBookmark;
 
-    // Optimistic UI update
-    mutate(newPages, false);
+      // Optimistic update
+      mutate(
+        produce(data, (draft) => {
+          draft[page][index].isBookmarked = shouldBookmark;
+        }),
+        false
+      );
 
-    updateBookmark(article.id).catch((err) => {
-      console.error(err);
-      // Rollback to previous state on failure
-      mutate(pages, false);
-    });
-  };
+      updateBookmark(articleId).catch((err) => {
+        console.error(err);
+        // Rollback to previous state on failure
+        mutate(pages, false);
+      });
+    },
+    [data, mutate]
+  );
 
   return (
     <>
@@ -101,7 +107,9 @@ const Feed = ({ requestUrl }: FeedProps): ReactElement => {
           <ArticleCard
             key={article?.id}
             article={article}
-            onBookmarkClick={() => handleBookmarkClick(article, page, index)}
+            onBookmarkClick={(id, shouldBookmark) =>
+              handleBookmarkClick(id, page, index, shouldBookmark)
+            }
           />
         ))}
         <div ref={inViewRef}>{!isReachingEnd && <FeedLoader />}</div>

@@ -5,7 +5,7 @@ import { Article } from '../types/article';
 
 interface ArticleProps {
   article: Article;
-  onBookmarkClick: () => void;
+  onBookmarkClick: (id: number, shouldBookmark: boolean) => void;
 }
 
 const formatDate = (date: Date): string => {
@@ -57,7 +57,7 @@ const ArticleCard = ({
               </>
             )}
           </div>
-          <a onClick={onBookmarkClick}>
+          <a onClick={() => onBookmarkClick(article.id, !article.isBookmarked)}>
             {!article.isBookmarked ? 'BOOKMARK' : 'REMOVE'}
           </a>
         </div>
