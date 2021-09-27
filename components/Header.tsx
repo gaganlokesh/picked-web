@@ -12,6 +12,7 @@ const Header = (): ReactElement => {
           <div className="flex items-center h-full px-4 md:px-0">
             <div className="flex-auto">
               <Link href="/">🚀 HOME</Link>
+              {isLoggedIn && <Link href="/bookmarks">BOOKMARKS</Link>}
             </div>
             <div className="flex-initial">
               {isReady && !isLoggedIn && (
