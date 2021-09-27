@@ -8,6 +8,7 @@ import { Article } from '../types/article';
 import ArticleCard from './ArticleCard';
 import ArticleLoader from './ArticleLoader';
 import FeedItem from './FeedItem';
+import { useAuth } from '../contexts/AuthContext';
 
 interface FeedProps {
   requestUrl: string;
@@ -43,6 +44,7 @@ const FeedLoader = (): ReactElement => (
 );
 
 const Feed = ({ requestUrl }: FeedProps): ReactElement => {
+  const { isLoggedIn, openLoginModal } = useAuth();
   const { ref: inViewRef, inView } = useInView();
   const { data, setSize, isValidating, mutate } = useSWRInfinite<Article[]>(
     (...args) => generateFeedKey(requestUrl, ...args),
@@ -80,6 +82,11 @@ const Feed = ({ requestUrl }: FeedProps): ReactElement => {
       index: number,
       shouldBookmark: boolean
     ) => {
+      if (!isLoggedIn) {
+        openLoginModal();
+        return;
+      }
+
       const pages = data;
       const updateBookmark = shouldBookmark ? addBookmark : removeBookmark;
 
@@ -97,7 +104,7 @@ const Feed = ({ requestUrl }: FeedProps): ReactElement => {
         mutate(pages, false);
       });
     },
-    [data, mutate]
+    [data, isLoggedIn, mutate, openLoginModal]
   );
 
   return (
