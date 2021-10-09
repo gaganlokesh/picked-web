@@ -1,0 +1,17 @@
+:root {
+  --primary-darker: theme('colors.emerald.900');
+  --primary-dark: theme('colors.emerald.700');
+  --primary-semidark: theme('colors.emerald.600');
+  --primary: theme('colors.emerald.500');
+  --primary-semilight: theme('colors.emerald.300');
+  --primary-light: theme('colors.emerald.100');
+  --primary-lighter: theme('colors.emerald.50');
+
+  --neutral-darker: theme('colors.coolGray.900');
+  --neutral-dark: theme('colors.coolGray.700');
+  --neutral-semidark: theme('colors.coolGray.600');
+  --neutral: theme('colors.coolGray.500');
+  --neutral-semilight: theme('colors.coolGray.400');
+  --neutral-light: theme('colors.coolGray.300');
+  --neutral-lighter: theme('colors.coolGray.100');
+}
