@@ -1,6 +1,7 @@
 import { ReactElement } from 'react';
 import Link from 'next/link';
 import { useAuth } from '../contexts/AuthContext';
+import Button from './Button';
 
 const Header = (): ReactElement => {
   const { isReady, isLoggedIn, openLoginModal, logout } = useAuth();
@@ -16,12 +17,7 @@ const Header = (): ReactElement => {
             </div>
             <div className="flex-initial">
               {isReady && !isLoggedIn && (
-                <button
-                  className="text-md ml-auto uppercase"
-                  onClick={openLoginModal}
-                >
-                  Login
-                </button>
+                <Button onClick={openLoginModal}>Get started</Button>
               )}
               {isLoggedIn && (
                 <button className="text-md ml-auto uppercase" onClick={logout}>
