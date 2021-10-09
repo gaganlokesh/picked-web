@@ -32,7 +32,7 @@ const SourceItem = ({ source, onFollow }: SourceItemProps): ReactElement => {
               <h5>{source.name}</h5>
             </a>
           </Link>
-          <div className="text-neutral">{source.description}</div>
+          <div className="text-neutral line-clamp-1">{source.description}</div>
         </div>
         <div className="ml-3">
           <Button
