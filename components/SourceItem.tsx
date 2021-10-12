@@ -3,16 +3,22 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Source } from '../types/source';
 import Button from './Button';
+import classNames from 'classnames';
 
 interface SourceItemProps {
   source: Source;
   onFollow: (source: Source, shouldFollow: boolean) => unknown;
+  className?: string;
 }
 
-const SourceItem = ({ source, onFollow }: SourceItemProps): ReactElement => {
+const SourceItem = ({
+  source,
+  onFollow,
+  className = '',
+}: SourceItemProps): ReactElement => {
   return (
     <>
-      <div className="flex items-center py-6">
+      <div className={classNames('flex items-center', className)}>
         <div className="flex-shrink-0 mr-3">
           <Link href={`/sources/${source?.slug}`}>
             <a className="flex">

@@ -7,6 +7,7 @@ import { followSource, unfollowSource } from '../api/source';
 import { useAuth } from '../contexts/AuthContext';
 import { Source } from '../types/source';
 import SourceItem from './SourceItem';
+import SourceItemLoader from './SourceItemLoader';
 
 interface SourceListProps {
   requestEndpoint: string;
@@ -96,6 +97,7 @@ const SourceList = ({ requestEndpoint }: SourceListProps): ReactElement => {
         {sourceItems.map(({ source, page, index }) => (
           <SourceItem
             key={source.id}
+            className="py-6"
             source={source}
             onFollow={(source: Source, shouldFollow: boolean) =>
               handleFollowClick(source, page, index, shouldFollow)
@@ -103,7 +105,17 @@ const SourceList = ({ requestEndpoint }: SourceListProps): ReactElement => {
           />
         ))}
       </div>
-      <div ref={inViewRef}>{!isReachingEnd && 'Loading...'}</div>
+      <div ref={inViewRef}>
+        {!isReachingEnd && (
+          <>
+            <SourceItemLoader className="py-6" />
+            <SourceItemLoader className="py-6" />
+            <SourceItemLoader className="py-6" />
+            <SourceItemLoader className="py-6" />
+            <SourceItemLoader className="py-6" />
+          </>
+        )}
+      </div>
     </>
   );
 };
