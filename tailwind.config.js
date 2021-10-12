@@ -31,7 +31,11 @@ module.exports = {
         lightest: 'var(--neutral-lightest)',
       },
     },
-    extend: {},
+    extend: {
+      borderRadius: {
+        xl: '0.75rem',
+      },
+    },
   },
   variants: {
     extend: {},

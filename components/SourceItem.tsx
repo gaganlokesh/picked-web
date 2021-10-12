@@ -8,12 +8,14 @@ import classNames from 'classnames';
 interface SourceItemProps {
   source: Source;
   onFollow: (source: Source, shouldFollow: boolean) => unknown;
+  size?: 'sm' | 'default';
   className?: string;
 }
 
 const SourceItem = ({
   source,
   onFollow,
+  size = 'default',
   className = '',
 }: SourceItemProps): ReactElement => {
   return (
@@ -34,11 +36,17 @@ const SourceItem = ({
         </div>
         <div className="flex-1">
           <Link href={`/sources/${source?.slug}`}>
-            <a className="cursor-pointer">
-              <h5>{source.name}</h5>
+            <a className="line-clamp-1 cursor-pointer">
+              {size === 'sm' ? <h6>{source.name}</h6> : <h5>{source.name}</h5>}
             </a>
           </Link>
-          <div className="text-neutral line-clamp-1">{source.description}</div>
+          <div
+            className={classNames('text-neutral line-clamp-1', {
+              'text-sm': size === 'sm',
+            })}
+          >
+            {source.description}
+          </div>
         </div>
         <div className="ml-3">
           <Button
