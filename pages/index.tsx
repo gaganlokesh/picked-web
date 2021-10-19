@@ -3,6 +3,7 @@ import Feed from '../components/Feed';
 import FeedLayout from '../components/layouts/FeedLayout';
 import { useAuth } from '../contexts/AuthContext';
 import SuggestedSources from '../components/widgets/SuggestedSources';
+import SuggestedReading from '../components/widgets/SuggestedReading';
 
 export default function Home() {
   const { isReady } = useAuth();
@@ -10,14 +11,17 @@ export default function Home() {
 
   return (
     <>
-      <div className="container mx-auto py-5">
+      <div className="container py-5 mx-auto">
         <div className="flex">
           <main className="flex-1">
             <Feed requestUrl={requestUrl} />
           </main>
-          <div className="mx-10"></div>
-          <aside className="w-96">
-            <SuggestedSources />
+          <div className="hidden mx-5 xl:mx-10 lg:block"></div>
+          <aside className="hidden w-96 lg:block">
+            <div className="grid gap-y-6">
+              <SuggestedSources />
+              <SuggestedReading />
+            </div>
           </aside>
         </div>
       </div>
