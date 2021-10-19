@@ -35,11 +35,11 @@ const generateFeedKey = (
 
 const FeedLoader = (): ReactElement => (
   <>
-    <ArticleLoader />
-    <ArticleLoader />
-    <ArticleLoader />
-    <ArticleLoader />
-    <ArticleLoader />
+    <ArticleLoader className="py-3 md:py-5" />
+    <ArticleLoader className="py-3 md:py-5" />
+    <ArticleLoader className="py-3 md:py-5" />
+    <ArticleLoader className="py-3 md:py-5" />
+    <ArticleLoader className="py-3 md:py-5" />
   </>
 );
 
@@ -112,6 +112,7 @@ const Feed = ({ requestUrl }: FeedProps): ReactElement => {
       <div>
         {feedItems.map(({ article, page, index }) => (
           <ArticleCard
+            className="py-3 md:py-5"
             key={article?.id}
             article={article}
             onBookmarkClick={(id, shouldBookmark) =>
