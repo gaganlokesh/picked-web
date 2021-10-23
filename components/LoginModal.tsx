@@ -19,7 +19,7 @@ const LoginModal = ({ open, onClose }: ModalProps): ReactElement => {
       <Dialog
         open={open}
         onClose={onClose}
-        className="fixed z-10 inset-0 overflow-y-auto"
+        className="fixed inset-0 z-10 overflow-y-auto"
       >
         <div className="min-h-screen text-center">
           <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
@@ -43,18 +43,24 @@ const LoginModal = ({ open, onClose }: ModalProps): ReactElement => {
               Join the community of developers and explore unlimited content
             </Dialog.Description>
 
-            <div className="text-center mt-4">
-              <SocialLoginButton
-                icon={<GoogleLogo />}
-                text={'Sign in with Google'}
-                onClick={loginWithGoogle}
-              />
+            <div className="mt-4 text-center">
+              <div className="w-4/5 mx-auto">
+                <SocialLoginButton
+                  className="my-2"
+                  icon={<GoogleLogo />}
+                  onClick={loginWithGoogle}
+                >
+                  Sign in with Google
+                </SocialLoginButton>
 
-              <SocialLoginButton
-                icon={<GithubLogo />}
-                text={'Sign in with Github'}
-                onClick={loginWithGithub}
-              />
+                <SocialLoginButton
+                  className="my-2"
+                  icon={<GithubLogo />}
+                  onClick={loginWithGithub}
+                >
+                  Sign in with Github
+                </SocialLoginButton>
+              </div>
 
               <p className="mt-5 text-sm">
                 By signing up you agree with our&nbsp;
