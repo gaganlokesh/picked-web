@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import SocialLoginButton from './SocialLoginButton';
 import GithubLogo from '../public/icons/github.svg';
 import GoogleLogo from '../public/icons/google.svg';
-import TimesIcon from '../public/icons/times.svg';
+import IconTimes from '../public/icons/times.svg';
 
 interface ModalProps {
   open: boolean;
@@ -33,11 +33,9 @@ const LoginModal = ({ open, onClose }: ModalProps): ReactElement => {
           </span>
 
           <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-center align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-            <TimesIcon
-              width="24"
-              className="ml-auto cursor-pointer"
-              onClick={onClose}
-            />
+            <a className="text-xl" onClick={onClose}>
+              <IconTimes className="ml-auto cursor-pointer" />
+            </a>
             <Dialog.Title className="font-medium">Login</Dialog.Title>
             <Dialog.Description className="mt-2">
               Join the community of developers and explore unlimited content

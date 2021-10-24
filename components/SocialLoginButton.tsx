@@ -17,12 +17,12 @@ const SocialLoginButton = ({
   return (
     <button
       className={classNames(
-        'w-full inline-flex py-2 border rounded-full justify-center',
+        'w-full inline-flex py-2 border rounded-full justify-center items-center',
         className
       )}
       onClick={onClick}
     >
-      {icon}
+      <span className="text-lg">{icon}</span>
       <span className="ml-4 font-semibold">{children}</span>
     </button>
   );
