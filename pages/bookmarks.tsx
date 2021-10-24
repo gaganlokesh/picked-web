@@ -16,9 +16,9 @@ export default function BookmarksPage(): ReactElement {
 
   return (
     <>
-      <div className="grid grid-cols-12 gap-x-5">
-        <div className="col-start-4 col-span-6">
-          <h1>Bookmarks</h1>
+      <div className="container mx-auto">
+        <div className="mx-auto lg:max-w-3xl">
+          <h1 className="my-10 lg:my-14">Bookmarks</h1>
           <Feed requestUrl={isLoggedIn ? '/bookmarks' : null} />
         </div>
       </div>
