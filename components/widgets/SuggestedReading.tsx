@@ -13,7 +13,7 @@ const SuggestedReading = (): ReactElement => {
     fetcher
   );
 
-  if (!isLoggedIn || error) return <></>;
+  if (!isLoggedIn || error || data?.length < 3) return <></>;
 
   return (
     <div className="py-1 bg-neutral-lightest rounded-xl">
