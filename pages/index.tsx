@@ -16,8 +16,8 @@ export default function Home() {
           <main className="flex-1">
             <Feed requestUrl={requestUrl} />
           </main>
-          <div className="hidden mx-5 xl:mx-10 lg:block"></div>
-          <aside className="hidden w-96 lg:block">
+          <div className="hidden mx-6 xl:mx-12 lg:block"></div>
+          <aside className="hidden w-[325px] xl:w-[370px] lg:block">
             <div className="grid gap-y-6">
               <JoinCommunity />
               <SuggestedSources />

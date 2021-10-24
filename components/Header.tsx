@@ -8,9 +8,9 @@ const Header = (): ReactElement => {
 
   return (
     <>
-      <header className="w-full fixed bg-white shadow-md z-10">
-        <div className="container mx-auto h-16">
-          <div className="flex items-center h-full px-4 md:px-0">
+      <header className="fixed z-10 w-full bg-white shadow-md">
+        <div className="container h-16 mx-auto">
+          <div className="flex items-center h-full">
             <div className="flex-auto">
               <Link href="/">🚀 HOME</Link>
               {isLoggedIn && <Link href="/bookmarks">BOOKMARKS</Link>}
@@ -20,7 +20,7 @@ const Header = (): ReactElement => {
                 <Button onClick={openLoginModal}>Get started</Button>
               )}
               {isLoggedIn && (
-                <button className="text-md ml-auto uppercase" onClick={logout}>
+                <button className="ml-auto uppercase text-md" onClick={logout}>
                   Logout
                 </button>
               )}
