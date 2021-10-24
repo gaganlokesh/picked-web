@@ -10,17 +10,22 @@ interface ButtonProps {
 const Button = ({
   variant = 'solid',
   color = 'primary',
+  className,
   children,
   ...props
 }: ButtonProps & JSX.IntrinsicElements['button']): ReactElement => {
-  const className = classNames('py-2 px-5 text-sm rounded-full font-semibold', {
-    'bg-primary text-white': variant === 'solid' && color === 'primary',
-    'border border-primary text-primary':
-      variant === 'outline' && color === 'primary',
-  });
+  const classes = classNames(
+    'py-2 px-4 text-sm rounded-full font-semibold',
+    {
+      'bg-primary text-white': variant === 'solid' && color === 'primary',
+      'border border-primary text-primary':
+        variant === 'outline' && color === 'primary',
+    },
+    className
+  );
 
   return (
-    <button {...props} className={className}>
+    <button {...props} className={classes}>
       <span>{children}</span>
     </button>
   );

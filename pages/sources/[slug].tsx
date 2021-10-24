@@ -9,6 +9,7 @@ import TwitterLogo from '../../public/icons/twitter.svg';
 import LinkIcon from '../../public/icons/link.svg';
 import { useAuth } from '../../contexts/AuthContext';
 import { followSource, unfollowSource } from '../../api/source';
+import Button from '../../components/Button';
 
 const SourcePage = (): ReactElement => {
   const router = useRouter();
@@ -33,7 +34,7 @@ const SourcePage = (): ReactElement => {
   return (
     <>
       <div className="bg-gray-100">
-        <div className="container mx-auto py-8">
+        <div className="container py-8 mx-auto">
           {source && (
             <>
               <div>
@@ -76,9 +77,13 @@ const SourcePage = (): ReactElement => {
                   <span className="text-lg">
                     {source.followersCount + ' followers'}
                   </span>
-                  <button onClick={handleFollowClick} className="ml-4">
-                    {source.isFollowing ? 'FOLLOWING' : 'FOLLOW'}
-                  </button>
+                  <Button
+                    className="ml-4"
+                    variant={source.isFollowing ? 'solid' : 'outline'}
+                    onClick={handleFollowClick}
+                  >
+                    {source.isFollowing ? 'Following' : 'Follow'}
+                  </Button>
                 </div>
               </div>
             </>
@@ -86,7 +91,7 @@ const SourcePage = (): ReactElement => {
         </div>
       </div>
       <div className="container mx-auto">
-        <h1 className="my-10 text-center font-light">All stories</h1>
+        <h1 className="my-10 font-light text-center">All stories</h1>
         <div className="grid grid-cols-12 gap-x-2 md:gap-x-3 xl:gap-x-5">
           <div className="col-span-12 md:col-span-10 xl:col-span-8 md:col-start-2 xl:col-start-3">
             <Feed requestUrl={slug ? `/sources/${slug}/articles` : null} />
