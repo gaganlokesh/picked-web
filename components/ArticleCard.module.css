@@ -18,7 +18,7 @@
     }
 
     & .footer {
-      @apply flex items-baseline justify-between mt-2 lg:mt-3;
+      @apply flex items-center justify-between mt-2 lg:mt-3;
 
       & .meta {
         @apply text-sm text-neutral;

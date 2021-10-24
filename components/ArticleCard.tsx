@@ -3,6 +3,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Article } from '../types/article';
 import { formatDate } from '../utils/date';
+import IconBookmark from '../public/icons/bookmark.svg';
+import IconBookmarked from '../public/icons/bookmark-fill.svg';
 
 import styles from './ArticleCard.module.css';
 
@@ -80,11 +82,16 @@ const ArticleCard = ({
             </div>
             {showBookmark && (
               <a
+                className="text-lg cursor-pointer"
                 onClick={() =>
                   onBookmarkClick(article.id, !article.isBookmarked)
                 }
               >
-                {!article.isBookmarked ? 'BOOKMARK' : 'REMOVE'}
+                {!article.isBookmarked ? (
+                  <IconBookmark />
+                ) : (
+                  <IconBookmarked className="text-primary" />
+                )}
               </a>
             )}
           </div>
