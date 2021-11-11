@@ -7,7 +7,7 @@ import JoinCommunity from '../components/widgets/JoinCommunity';
 
 export default function Home() {
   const { isReady, isLoggedIn } = useAuth();
-  const requestUrl = isReady ? '/articles' : null;
+  const requestUrl = isReady ? '/feed' : null;
 
   return (
     <>
