@@ -6,6 +6,6 @@ export const addBookmark = (articleId: number): Promise<unknown> => {
 
 export const removeBookmark = (articleId: number): Promise<unknown> => {
   return client
-    .post(`articles/${articleId}/remove_bookmark`)
+    .delete(`articles/${articleId}/bookmark`)
     .then((res) => res.data);
 };
