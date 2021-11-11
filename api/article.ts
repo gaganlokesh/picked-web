@@ -9,3 +9,11 @@ export const removeBookmark = (articleId: number): Promise<unknown> => {
     .delete(`articles/${articleId}/bookmark`)
     .then((res) => res.data);
 };
+
+export const addUpvote = (articleId: number): Promise<unknown> => {
+  return client.post(`articles/${articleId}/upvote`).then((res) => res.data);
+};
+
+export const removeUpvote = (articleId: number): Promise<unknown> => {
+  return client.delete(`articles/${articleId}/upvote`).then((res) => res.data);
+};

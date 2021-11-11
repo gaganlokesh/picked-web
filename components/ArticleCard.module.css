@@ -17,13 +17,13 @@
       @apply text-base md:text-xl xl:text-2xl leading-5 md:leading-6 xl:leading-7 font-bold;
     }
 
-    & .footer {
-      @apply flex items-center justify-between mt-2 lg:mt-3;
-
-      & .meta {
-        @apply text-sm text-neutral;
-      }
+    & .meta {
+      @apply text-sm text-neutral mt-1;
     }
+  }
+
+  & .actions {
+    @apply flex items-center justify-between mt-2 lg:mt-5 text-xl text-neutral;
   }
 }
 
@@ -41,12 +41,8 @@
       @apply text-base font-bold leading-5;
     }
 
-    & .footer {
-      @apply flex justify-between mt-2;
-
-      & .meta {
-        @apply text-sm text-neutral;
-      }
+    & .meta {
+      @apply text-sm text-neutral mt-2;
     }
   }
 }

@@ -3,7 +3,12 @@ import { useInView } from 'react-intersection-observer';
 import useSWRInfinite from 'swr/infinite';
 import produce from 'immer';
 import fetcher from '../api/fetcher';
-import { addBookmark, removeBookmark } from '../api/article';
+import {
+  addBookmark,
+  addUpvote,
+  removeBookmark,
+  removeUpvote,
+} from '../api/article';
 import { Article } from '../types/article';
 import ArticleCard from './ArticleCard';
 import ArticleLoader from './ArticleLoader';
@@ -107,6 +112,38 @@ const Feed = ({ requestUrl }: FeedProps): ReactElement => {
     [data, isLoggedIn, mutate, openLoginModal]
   );
 
+  const handleUpvoteClick = useCallback(
+    (articleId: number, page: number, index: number, shouldUpvote: boolean) => {
+      if (!isLoggedIn) {
+        openLoginModal();
+        return;
+      }
+
+      const pages = data;
+      const updateUpvote = shouldUpvote ? addUpvote : removeUpvote;
+
+      // Optimistic update
+      mutate(
+        produce(data, (draft) => {
+          let upvotesCount = draft[page][index].upvotesCount;
+
+          draft[page][index].isUpvoted = shouldUpvote;
+          draft[page][index].upvotesCount = shouldUpvote
+            ? upvotesCount + 1
+            : upvotesCount - 1;
+        }),
+        false
+      );
+
+      updateUpvote(articleId).catch((err) => {
+        console.error(err);
+        // Rollback to previous state on failure
+        mutate(pages, false);
+      });
+    },
+    [data, isLoggedIn, mutate, openLoginModal]
+  );
+
   return (
     <>
       <div>
@@ -117,6 +154,9 @@ const Feed = ({ requestUrl }: FeedProps): ReactElement => {
             article={article}
             onBookmarkClick={(id, shouldBookmark) =>
               handleBookmarkClick(id, page, index, shouldBookmark)
+            }
+            onUpvoteClick={(id, shouldUpvote) =>
+              handleUpvoteClick(id, page, index, shouldUpvote)
             }
           />
         ))}

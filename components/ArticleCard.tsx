@@ -7,6 +7,7 @@ import IconBookmark from '../public/icons/bookmark.svg';
 import IconBookmarked from '../public/icons/bookmark-fill.svg';
 
 import styles from './ArticleCard.module.css';
+import Upvote from './Upvote';
 
 interface BaseArticleProps {
   article: Article;
@@ -16,11 +17,13 @@ interface BaseArticleProps {
 interface WideArticleProps extends BaseArticleProps {
   variant?: 'wide';
   onBookmarkClick: (id: number, shouldBookmark: boolean) => void;
+  onUpvoteClick: (id: number, shouldUpvote: boolean) => void;
 }
 
 interface MinimalArticleProps extends BaseArticleProps {
   variant: 'minimal';
   onBookmarkClick?: (id: number, shouldBookmark: boolean) => void;
+  onUpvoteClick?: (id: number, shouldUpvote: boolean) => void;
 }
 
 type ArticleProps = MinimalArticleProps | WideArticleProps;
@@ -28,19 +31,20 @@ type ArticleProps = MinimalArticleProps | WideArticleProps;
 const ArticleCard = ({
   article,
   onBookmarkClick,
+  onUpvoteClick,
   variant = 'wide',
   className = '',
 }: ArticleProps): JSX.Element => {
-  let showMedia, showBookmark;
+  let showMedia: boolean, showActions: boolean;
 
   switch (variant) {
     case 'wide':
       showMedia = true;
-      showBookmark = true;
+      showActions = true;
       break;
     case 'minimal':
       showMedia = false;
-      showBookmark = false;
+      showActions = false;
       break;
   }
 
@@ -69,8 +73,6 @@ const ArticleCard = ({
             <h2 className={styles.title}>
               <a href={article.url}>{article.title}</a>
             </h2>
-          </div>
-          <div className={styles.footer}>
             <div className={styles.meta}>
               <span>{formatDate(article.publishedAt)}</span>
               {!!article.readTime && (
@@ -80,9 +82,16 @@ const ArticleCard = ({
                 </>
               )}
             </div>
-            {showBookmark && (
+          </div>
+          {showActions && (
+            <div className={styles.actions}>
+              <Upvote
+                upvoted={article.isUpvoted}
+                count={article.upvotesCount}
+                onUpvote={() => onUpvoteClick(article.id, !article.isUpvoted)}
+              />
               <a
-                className="text-lg cursor-pointer"
+                className="cursor-pointer"
                 onClick={() =>
                   onBookmarkClick(article.id, !article.isBookmarked)
                 }
@@ -90,11 +99,11 @@ const ArticleCard = ({
                 {!article.isBookmarked ? (
                   <IconBookmark />
                 ) : (
-                  <IconBookmarked className="text-primary" />
+                  <IconBookmarked className="text-neutral-dark" />
                 )}
               </a>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </article>
     </>
