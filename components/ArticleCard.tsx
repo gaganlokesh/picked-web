@@ -12,6 +12,7 @@ import Upvote from './Upvote';
 interface BaseArticleProps {
   article: Article;
   className?: string;
+  onClick: (id: number) => void;
 }
 
 interface WideArticleProps extends BaseArticleProps {
@@ -30,6 +31,7 @@ type ArticleProps = MinimalArticleProps | WideArticleProps;
 
 const ArticleCard = ({
   article,
+  onClick,
   onBookmarkClick,
   onUpvoteClick,
   variant = 'wide',
@@ -71,7 +73,9 @@ const ArticleCard = ({
               <a className={styles.source}>{article?.source.name}</a>
             </Link>
             <h2 className={styles.title}>
-              <a href={article.url}>{article.title}</a>
+              <a href={article.url} onClick={() => onClick(article.id)}>
+                {article.title}
+              </a>
             </h2>
             <div className={styles.meta}>
               <span>{formatDate(article.publishedAt)}</span>
