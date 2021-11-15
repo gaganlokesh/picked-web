@@ -5,9 +5,10 @@ import { Article } from '../types/article';
 import { formatDate } from '../utils/date';
 import IconBookmark from '../public/icons/bookmark.svg';
 import IconBookmarked from '../public/icons/bookmark-fill.svg';
+import Upvote from './Upvote';
+import ArticleActionsMenu from './ArticleActionsMenu';
 
 import styles from './ArticleCard.module.css';
-import Upvote from './Upvote';
 
 interface BaseArticleProps {
   article: Article;
@@ -19,12 +20,14 @@ interface WideArticleProps extends BaseArticleProps {
   variant?: 'wide';
   onBookmarkClick: (id: number, shouldBookmark: boolean) => void;
   onUpvoteClick: (id: number, shouldUpvote: boolean) => void;
+  onReportClick: () => void;
 }
 
 interface MinimalArticleProps extends BaseArticleProps {
   variant: 'minimal';
   onBookmarkClick?: (id: number, shouldBookmark: boolean) => void;
   onUpvoteClick?: (id: number, shouldUpvote: boolean) => void;
+  onReportClick?: () => void;
 }
 
 type ArticleProps = MinimalArticleProps | WideArticleProps;
@@ -34,6 +37,7 @@ const ArticleCard = ({
   onClick,
   onBookmarkClick,
   onUpvoteClick,
+  onReportClick,
   variant = 'wide',
   className = '',
 }: ArticleProps): JSX.Element => {
@@ -94,18 +98,21 @@ const ArticleCard = ({
                 count={article.upvotesCount}
                 onUpvote={() => onUpvoteClick(article.id, !article.isUpvoted)}
               />
-              <a
-                className="cursor-pointer"
-                onClick={() =>
-                  onBookmarkClick(article.id, !article.isBookmarked)
-                }
-              >
-                {!article.isBookmarked ? (
-                  <IconBookmark />
-                ) : (
-                  <IconBookmarked className="text-neutral-dark" />
-                )}
-              </a>
+              <div className="flex text-neutral-dark">
+                <a
+                  className="cursor-pointer"
+                  onClick={() =>
+                    onBookmarkClick(article.id, !article.isBookmarked)
+                  }
+                >
+                  {!article.isBookmarked ? (
+                    <IconBookmark />
+                  ) : (
+                    <IconBookmarked />
+                  )}
+                </a>
+                <ArticleActionsMenu onReportClick={onReportClick} />
+              </div>
             </div>
           )}
         </div>

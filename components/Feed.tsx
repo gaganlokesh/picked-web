@@ -1,4 +1,4 @@
-import { ReactElement, useCallback, useEffect, useMemo } from 'react';
+import { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import useSWRInfinite from 'swr/infinite';
 import produce from 'immer';
@@ -15,6 +15,7 @@ import ArticleCard from './ArticleCard';
 import ArticleLoader from './ArticleLoader';
 import FeedItem from './FeedItem';
 import { useAuth } from '../contexts/AuthContext';
+import ArticleReportModal from './ArticleReportModal';
 
 interface FeedProps {
   requestUrl: string;
@@ -56,6 +57,8 @@ const Feed = ({ requestUrl }: FeedProps): ReactElement => {
     (...args) => generateFeedKey(requestUrl, ...args),
     fetcher
   );
+  const [isReportModalOpen, setReportModalOpen] = useState(false);
+  const [reportingArticle, setReportingArticle] = useState<Article>();
 
   const feedItems = useMemo<FeedItem[]>(() => {
     if (!data || data?.length === 0) return [];
@@ -160,10 +163,19 @@ const Feed = ({ requestUrl }: FeedProps): ReactElement => {
             onUpvoteClick={(id, shouldUpvote) =>
               handleUpvoteClick(id, page, index, shouldUpvote)
             }
+            onReportClick={() => {
+              setReportingArticle(article);
+              setReportModalOpen(true);
+            }}
           />
         ))}
         <div ref={inViewRef}>{!isReachingEnd && <FeedLoader />}</div>
       </div>
+      <ArticleReportModal
+        open={isReportModalOpen}
+        article={reportingArticle}
+        onClose={() => setReportModalOpen(false)}
+      />
     </>
   );
 };

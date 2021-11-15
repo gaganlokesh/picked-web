@@ -21,3 +21,16 @@ export const removeUpvote = (articleId: number): Promise<unknown> => {
 export const trackView = (articleId: number): Promise<unknown> => {
   return client.post(`articles/${articleId}/view`).then((res) => res.data);
 };
+
+export const reportArticle = (
+  articleId: number,
+  report: { category: string; reason: string }
+): Promise<unknown> => {
+  return client
+    .post(`articles/${articleId}/report`, {
+      ...report,
+      reportable_type: 'Article',
+      reportable_id: articleId,
+    })
+    .then((res) => res.data);
+};
