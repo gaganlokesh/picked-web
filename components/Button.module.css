@@ -1,0 +1,24 @@
+.btn {
+  @apply py-2 px-4 text-sm rounded-full font-semibold;
+
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.6;
+  }
+}
+
+.btn-primary {
+  @apply bg-primary text-white;
+}
+
+.btn-primary-outline {
+  @apply border border-primary text-primary;
+}
+
+.btn-neutral {
+  @apply bg-neutral-darkest text-neutral-lightest;
+}
+
+.btn-neutral-outline {
+  @apply border border-neutral-darkest text-neutral-darkest;
+}

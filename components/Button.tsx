@@ -1,9 +1,10 @@
 import { ReactElement, ReactNode } from 'react';
 import classNames from 'classnames';
+import styles from './Button.module.css';
 
 interface ButtonProps {
   variant?: 'solid' | 'outline';
-  color?: 'primary';
+  color?: 'primary' | 'neutral';
   children: ReactNode;
 }
 
@@ -15,11 +16,14 @@ const Button = ({
   ...props
 }: ButtonProps & JSX.IntrinsicElements['button']): ReactElement => {
   const classes = classNames(
-    'py-2 px-4 text-sm rounded-full font-semibold',
+    styles.btn,
     {
-      'bg-primary text-white': variant === 'solid' && color === 'primary',
-      'border border-primary text-primary':
+      [styles['btn-primary']]: variant === 'solid' && color === 'primary',
+      [styles['btn-primary-outline']]:
         variant === 'outline' && color === 'primary',
+      [styles['btn-neutral']]: variant === 'solid' && color === 'neutral',
+      [styles['btn-neutral-outline']]:
+        variant === 'outline' && color === 'neutral',
     },
     className
   );
