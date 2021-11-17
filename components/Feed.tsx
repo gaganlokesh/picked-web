@@ -1,11 +1,13 @@
 import { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import useSWRInfinite from 'swr/infinite';
 import produce from 'immer';
 import fetcher from '../api/fetcher';
 import {
   addBookmark,
   addUpvote,
+  hideArticle,
   removeBookmark,
   removeUpvote,
   trackArticleView,
@@ -148,27 +150,58 @@ const Feed = ({ requestUrl }: FeedProps): ReactElement => {
     [data, isLoggedIn, mutate, openLoginModal]
   );
 
+  const handleHideClick = useCallback(
+    (articleId: number, page: number, index: number) => {
+      if (!isLoggedIn) {
+        openLoginModal();
+        return;
+      }
+
+      // Optimistic update
+      mutate(
+        produce(data, (draft) => {
+          draft[page].splice(index, 1);
+        }),
+        false
+      );
+
+      hideArticle(articleId).catch((err) => console.error(err));
+    },
+    [data, isLoggedIn, mutate, openLoginModal]
+  );
+
   return (
     <>
       <div>
-        {feedItems.map(({ article, page, index }) => (
-          <ArticleCard
-            className="py-3 md:py-5"
-            key={article?.id}
-            article={article}
-            onClick={trackArticleView}
-            onBookmarkClick={(id, shouldBookmark) =>
-              handleBookmarkClick(id, page, index, shouldBookmark)
-            }
-            onUpvoteClick={(id, shouldUpvote) =>
-              handleUpvoteClick(id, page, index, shouldUpvote)
-            }
-            onReportClick={() => {
-              setReportingArticle(article);
-              setReportModalOpen(true);
-            }}
-          />
-        ))}
+        <TransitionGroup>
+          {feedItems.map(({ article, page, index }) => (
+            <CSSTransition
+              key={article?.id}
+              timeout={300}
+              classNames={{
+                exit: 'opacity-100',
+                exitActive: 'opacity-0 transition-opacity duration-300',
+              }}
+            >
+              <ArticleCard
+                className="py-3 md:py-5 first:pt-0"
+                article={article}
+                onClick={trackArticleView}
+                onBookmarkClick={(id, shouldBookmark) =>
+                  handleBookmarkClick(id, page, index, shouldBookmark)
+                }
+                onUpvoteClick={(id, shouldUpvote) =>
+                  handleUpvoteClick(id, page, index, shouldUpvote)
+                }
+                onReportClick={() => {
+                  setReportingArticle(article);
+                  setReportModalOpen(true);
+                }}
+                onHideClick={(id) => handleHideClick(id, page, index)}
+              />
+            </CSSTransition>
+          ))}
+        </TransitionGroup>
         <div ref={inViewRef}>{!isReachingEnd && <FeedLoader />}</div>
       </div>
       <ArticleReportModal

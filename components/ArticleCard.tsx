@@ -21,6 +21,7 @@ interface WideArticleProps extends BaseArticleProps {
   onBookmarkClick: (id: number, shouldBookmark: boolean) => void;
   onUpvoteClick: (id: number, shouldUpvote: boolean) => void;
   onReportClick: () => void;
+  onHideClick: (id: number) => void;
 }
 
 interface MinimalArticleProps extends BaseArticleProps {
@@ -28,6 +29,7 @@ interface MinimalArticleProps extends BaseArticleProps {
   onBookmarkClick?: (id: number, shouldBookmark: boolean) => void;
   onUpvoteClick?: (id: number, shouldUpvote: boolean) => void;
   onReportClick?: () => void;
+  onHideClick?: (id: number) => void;
 }
 
 type ArticleProps = MinimalArticleProps | WideArticleProps;
@@ -38,6 +40,7 @@ const ArticleCard = ({
   onBookmarkClick,
   onUpvoteClick,
   onReportClick,
+  onHideClick,
   variant = 'wide',
   className = '',
 }: ArticleProps): JSX.Element => {
@@ -111,7 +114,11 @@ const ArticleCard = ({
                     <IconBookmarked />
                   )}
                 </a>
-                <ArticleActionsMenu onReportClick={onReportClick} />
+                <ArticleActionsMenu
+                  article={article}
+                  onReportClick={onReportClick}
+                  onHideClick={onHideClick}
+                />
               </div>
             </div>
           )}

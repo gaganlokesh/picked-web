@@ -38,6 +38,7 @@ module.exports = {
     },
   },
   variants: {
+    padding: ['first'],
     extend: {},
   },
   plugins: [

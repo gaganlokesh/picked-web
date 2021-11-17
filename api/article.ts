@@ -22,6 +22,10 @@ export const trackArticleView = (articleId: number): Promise<unknown> => {
   return client.post(`articles/${articleId}/view`).then((res) => res.data);
 };
 
+export const hideArticle = (articleId: number): Promise<unknown> => {
+  return client.post(`articles/${articleId}/hide`).then((res) => res.data);
+};
+
 export const reportArticle = (
   articleId: number,
   report: { category: string; reason: string }

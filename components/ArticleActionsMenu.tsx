@@ -1,7 +1,9 @@
 import { Menu } from '@headlessui/react';
 import { ReactElement, ReactNode, useMemo } from 'react';
+import { Article } from '../types/article';
 import IconMenu from '../public/icons/ellipsis.svg';
 import IconReport from '../public/icons/flag.svg';
+import IconHidden from '../public/icons/eye-slash.svg';
 
 interface ArticleAction {
   icon: ReactNode;
@@ -10,21 +12,30 @@ interface ArticleAction {
 }
 
 interface ActionMenuProps {
+  article: Article;
   onReportClick: () => void;
+  onHideClick: (id: number) => void;
 }
 
 const ArticleActionsMenu = ({
+  article,
   onReportClick,
+  onHideClick,
 }: ActionMenuProps): ReactElement => {
   const actions = useMemo<ArticleAction[]>(
     () => [
+      {
+        icon: <IconHidden />,
+        label: 'Hide story',
+        onClick: () => onHideClick(article.id),
+      },
       {
         icon: <IconReport />,
         label: 'Report',
         onClick: onReportClick,
       },
     ],
-    [onReportClick]
+    [article, onReportClick, onHideClick]
   );
 
   return (
