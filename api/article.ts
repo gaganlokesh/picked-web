@@ -18,7 +18,7 @@ export const removeUpvote = (articleId: number): Promise<unknown> => {
   return client.delete(`articles/${articleId}/upvote`).then((res) => res.data);
 };
 
-export const trackView = (articleId: number): Promise<unknown> => {
+export const trackArticleView = (articleId: number): Promise<unknown> => {
   return client.post(`articles/${articleId}/view`).then((res) => res.data);
 };
 

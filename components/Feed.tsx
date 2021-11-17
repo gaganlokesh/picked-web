@@ -8,7 +8,7 @@ import {
   addUpvote,
   removeBookmark,
   removeUpvote,
-  trackView,
+  trackArticleView,
 } from '../api/article';
 import { Article } from '../types/article';
 import ArticleCard from './ArticleCard';
@@ -156,7 +156,7 @@ const Feed = ({ requestUrl }: FeedProps): ReactElement => {
             className="py-3 md:py-5"
             key={article?.id}
             article={article}
-            onClick={trackView}
+            onClick={trackArticleView}
             onBookmarkClick={(id, shouldBookmark) =>
               handleBookmarkClick(id, page, index, shouldBookmark)
             }
