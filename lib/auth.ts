@@ -1,17 +1,36 @@
-import firebase from './firebase';
+import {
+  getAuth,
+  GithubAuthProvider,
+  GoogleAuthProvider,
+  TwitterAuthProvider,
+  signInWithPopup,
+  UserCredential,
+} from '@firebase/auth';
+import app from './firebase';
 
-const github = new firebase.auth.GithubAuthProvider();
-const google = new firebase.auth.GoogleAuthProvider();
-const twitter = new firebase.auth.TwitterAuthProvider();
+const github: GithubAuthProvider = new GithubAuthProvider();
+const google: GoogleAuthProvider = new GoogleAuthProvider();
+const twitter: TwitterAuthProvider = new TwitterAuthProvider();
 
-export const githubSigninPopup = (): Promise<firebase.auth.UserCredential> => {
-  return firebase.auth().signInWithPopup(github);
+const auth = getAuth(app);
+
+export const githubSigninPopup = (): Promise<string> => {
+  return signInWithPopup(auth, github).then((result: UserCredential) => {
+    const credential = GithubAuthProvider.credentialFromResult(result);
+    return credential.accessToken;
+  });
 };
 
-export const googleSigninPopup = (): Promise<firebase.auth.UserCredential> => {
-  return firebase.auth().signInWithPopup(google);
+export const googleSigninPopup = (): Promise<string> => {
+  return signInWithPopup(auth, google).then((result: UserCredential) => {
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    return credential.accessToken;
+  });
 };
 
-export const twitterSigninPopup = (): Promise<firebase.auth.UserCredential> => {
-  return firebase.auth().signInWithPopup(twitter);
+export const twitterSigninPopup = (): Promise<string> => {
+  return signInWithPopup(auth, twitter).then((result: UserCredential) => {
+    const credential = TwitterAuthProvider.credentialFromResult(result);
+    return credential.accessToken;
+  });
 };

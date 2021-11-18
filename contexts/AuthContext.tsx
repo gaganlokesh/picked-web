@@ -11,7 +11,6 @@ import useSWR from 'swr';
 import { getAccessToken, refreshAccessToken, revokeToken } from '../api/auth';
 import { getLoggedInUser } from '../api/user';
 import { githubSigninPopup, googleSigninPopup } from '../lib/auth';
-import firebase from '../lib/firebase';
 import { OAuthProvider } from '../types/auth';
 import { User } from '../types/user';
 
@@ -79,11 +78,9 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
   }, [userData]);
 
   const handleFirebaseAuthResponse = useCallback(
-    (provider: OAuthProvider, res: firebase.auth.UserCredential) => {
-      const credential = res.credential as firebase.auth.OAuthCredential;
-
+    (provider: OAuthProvider, token: string) => {
       // Request access token from API server using Firebase auth credential
-      return getAccessToken(provider, credential.accessToken)
+      return getAccessToken(provider, token)
         .then((tokenResponse) => {
           setIsLoggedIn(true);
 
