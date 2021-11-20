@@ -1,36 +1,15 @@
-import {
-  getAuth,
-  GithubAuthProvider,
-  GoogleAuthProvider,
-  TwitterAuthProvider,
-  signInWithPopup,
-  UserCredential,
-} from 'firebase/auth';
-import app from './firebase';
+import { OAuthProvider } from '../types/auth';
 
-const github: GithubAuthProvider = new GithubAuthProvider();
-const google: GoogleAuthProvider = new GoogleAuthProvider();
-const twitter: TwitterAuthProvider = new TwitterAuthProvider();
+export const authorizeWithProvider = (provider: OAuthProvider): void => {
+  let params: string = new URLSearchParams({
+    provider,
+    redirect_uri: getOAuthRedirectUri(provider),
+  }).toString();
+  const authUrl = `${process.env.NEXT_PUBLIC_API_URL}/oauth/authorize?${params}`;
 
-const auth = getAuth(app);
-
-export const githubSigninPopup = (): Promise<string> => {
-  return signInWithPopup(auth, github).then((result: UserCredential) => {
-    const credential = GithubAuthProvider.credentialFromResult(result);
-    return credential.accessToken;
-  });
+  window.location.assign(authUrl);
 };
 
-export const googleSigninPopup = (): Promise<string> => {
-  return signInWithPopup(auth, google).then((result: UserCredential) => {
-    const credential = GoogleAuthProvider.credentialFromResult(result);
-    return credential.accessToken;
-  });
-};
-
-export const twitterSigninPopup = (): Promise<string> => {
-  return signInWithPopup(auth, twitter).then((result: UserCredential) => {
-    const credential = TwitterAuthProvider.credentialFromResult(result);
-    return credential.accessToken;
-  });
+export const getOAuthRedirectUri = (provider: OAuthProvider): string => {
+  return `${window.location.origin}/auth/callback/${provider}`;
 };

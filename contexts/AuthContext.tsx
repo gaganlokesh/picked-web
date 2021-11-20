@@ -10,7 +10,6 @@ import React, {
 import useSWR from 'swr';
 import { getAccessToken, refreshAccessToken, revokeToken } from '../api/auth';
 import { getLoggedInUser } from '../api/user';
-import { githubSigninPopup, googleSigninPopup } from '../lib/auth';
 import { OAuthProvider } from '../types/auth';
 import { User } from '../types/user';
 
@@ -19,14 +18,15 @@ interface AuthContextData {
   user: User;
   /** The "initial" token request has completed and login state is known */
   isReady: boolean;
-  /** New user login process has started and the OAuth handshake is in-progress */
-  isLoading: boolean;
   isLoggedIn: boolean;
   shouldOpenLoginModal: boolean;
+  authenticate: (
+    provider: OAuthProvider,
+    authCode: string,
+    redirectUri: string
+  ) => Promise<void>;
   openLoginModal: () => void;
   closeLoginModal: () => void;
-  loginWithGithub: () => Promise<void>;
-  loginWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -44,7 +44,6 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
 
   const [user, setUser] = useState<User>(null);
   const [isReady, setIsReady] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [shouldOpenLoginModal, setShouldOpenLoginModal] =
     useState<boolean>(false);
@@ -77,38 +76,25 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
     }
   }, [userData]);
 
-  const handleFirebaseAuthResponse = useCallback(
-    (provider: OAuthProvider, token: string) => {
-      // Request access token from API server using Firebase auth credential
-      return getAccessToken(provider, token)
+  const authenticate = useCallback(
+    (
+      provider: OAuthProvider,
+      authCode: string,
+      redirectUri: string
+    ): Promise<void> => {
+      return getAccessToken(provider, authCode, redirectUri)
         .then((tokenResponse) => {
           setIsLoggedIn(true);
 
           // Set timer to refresh access token before it expires
           setTimeout(refreshAuth, tokenResponse.expiresIn * 1000);
         })
-        .catch((err) => console.error(err));
+        .catch((err) => {
+          throw err;
+        });
     },
     [refreshAuth]
   );
-
-  const loginWithGithub = useCallback(() => {
-    setIsLoading(true);
-
-    return githubSigninPopup()
-      .then((res) => handleFirebaseAuthResponse('github', res))
-      .catch((err) => console.error(err))
-      .finally(() => setIsLoading(false));
-  }, [handleFirebaseAuthResponse]);
-
-  const loginWithGoogle = useCallback(() => {
-    setIsLoading(true);
-
-    return googleSigninPopup()
-      .then((res) => handleFirebaseAuthResponse('google', res))
-      .catch((err) => console.error(err))
-      .finally(() => setIsLoading(false));
-  }, [handleFirebaseAuthResponse]);
 
   const logout = useCallback(() => {
     return revokeToken()
@@ -125,25 +111,14 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
     () => ({
       user,
       isReady,
-      isLoading,
       isLoggedIn,
+      authenticate,
       shouldOpenLoginModal,
       openLoginModal: () => setShouldOpenLoginModal(true),
       closeLoginModal: () => setShouldOpenLoginModal(false),
-      loginWithGithub,
-      loginWithGoogle,
       logout,
     }),
-    [
-      user,
-      isReady,
-      isLoading,
-      isLoggedIn,
-      shouldOpenLoginModal,
-      loginWithGithub,
-      loginWithGoogle,
-      logout,
-    ]
+    [user, isReady, isLoggedIn, authenticate, shouldOpenLoginModal, logout]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

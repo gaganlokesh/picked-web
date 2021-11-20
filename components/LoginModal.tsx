@@ -1,6 +1,6 @@
 import { Dialog } from '@headlessui/react';
 import { ReactElement } from 'react';
-import { useAuth } from '../contexts/AuthContext';
+import { authorizeWithProvider } from '../lib/auth';
 import SocialLoginButton from './SocialLoginButton';
 import GithubLogo from '../public/icons/github.svg';
 import GoogleLogo from '../public/icons/google.svg';
@@ -12,8 +12,6 @@ interface ModalProps {
 }
 
 const LoginModal = ({ open, onClose }: ModalProps): ReactElement => {
-  const { loginWithGithub, loginWithGoogle } = useAuth();
-
   return (
     <>
       <Dialog
@@ -46,7 +44,7 @@ const LoginModal = ({ open, onClose }: ModalProps): ReactElement => {
                 <SocialLoginButton
                   className="my-2"
                   icon={<GoogleLogo />}
-                  onClick={loginWithGoogle}
+                  onClick={() => authorizeWithProvider('google')}
                 >
                   Sign in with Google
                 </SocialLoginButton>
@@ -54,7 +52,7 @@ const LoginModal = ({ open, onClose }: ModalProps): ReactElement => {
                 <SocialLoginButton
                   className="my-2"
                   icon={<GithubLogo />}
-                  onClick={loginWithGithub}
+                  onClick={() => authorizeWithProvider('github')}
                 >
                   Sign in with Github
                 </SocialLoginButton>

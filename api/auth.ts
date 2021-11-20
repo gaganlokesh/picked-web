@@ -4,12 +4,14 @@ import client from './client';
 
 export const getAccessToken = (
   provider: OAuthProvider,
-  assertion: string
+  assertion: string,
+  redirectUri: string = null
 ): Promise<TokenResponse> => {
   return client
     .post('oauth/token', {
       client_id: process.env.NEXT_PUBLIC_API_CLIENT_ID,
       grant_type: 'assertion',
+      redirect_uri: redirectUri,
       assertion,
       provider,
     })

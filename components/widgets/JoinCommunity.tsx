@@ -3,9 +3,10 @@ import { useAuth } from '../../contexts/AuthContext';
 import SocialLoginButton from '../SocialLoginButton';
 import GoogleLogo from '../../public/icons/google.svg';
 import GithubLogo from '../../public/icons/github.svg';
+import { authorizeWithProvider } from '../../lib/auth';
 
 const JoinCommunity = (): ReactElement => {
-  const { isLoggedIn, loginWithGoogle, loginWithGithub } = useAuth();
+  const { isLoggedIn } = useAuth();
 
   if (isLoggedIn) return <></>;
 
@@ -18,7 +19,7 @@ const JoinCommunity = (): ReactElement => {
         <SocialLoginButton
           className="my-2"
           icon={<GoogleLogo />}
-          onClick={loginWithGoogle}
+          onClick={() => authorizeWithProvider('google')}
         >
           Signin with Google
         </SocialLoginButton>
@@ -26,7 +27,7 @@ const JoinCommunity = (): ReactElement => {
         <SocialLoginButton
           className="my-2"
           icon={<GithubLogo />}
-          onClick={loginWithGithub}
+          onClick={() => authorizeWithProvider('github')}
         >
           Signin with Github
         </SocialLoginButton>
