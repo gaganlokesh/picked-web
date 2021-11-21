@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { ReactElement, useEffect } from 'react';
+import LoadingBoxes from '../../../components/LoadingBoxes';
 import { useAuth } from '../../../contexts/AuthContext';
 import { getOAuthRedirectUri } from '../../../lib/auth';
 import { OAuthProvider } from '../../../types/auth';
@@ -21,5 +22,12 @@ export default function AuthCallbackPage(): ReactElement {
     }
   }, [provider, code]);
 
-  return <div>Auth loading...</div>;
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <div>
+        <LoadingBoxes />
+        <h3 className="mt-12">Authenticating...</h3>
+      </div>
+    </div>
+  );
 }
