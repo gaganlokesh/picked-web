@@ -15,15 +15,15 @@ const SourceDetail = ({
   const stats: Array<{ label: string; count: number }> = [
     {
       label: 'Posts',
-      count: 20,
+      count: source?.articlesCount,
     },
     {
       label: 'Followers',
-      count: 165,
+      count: source?.followersCount,
     },
     {
       label: 'Views',
-      count: 0,
+      count: source?.totalViewsCount,
     },
   ];
 

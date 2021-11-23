@@ -6,6 +6,8 @@ export interface Source {
   websiteUrl: string;
   description: string;
   followersCount?: number;
+  articlesCount?: number;
+  totalViewsCount?: number;
   isFollowing?: boolean;
   feedUrl?: string;
 }
