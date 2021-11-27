@@ -10,7 +10,7 @@ import React, {
 import useSWR from 'swr';
 import { getAccessToken, refreshAccessToken, revokeToken } from '../api/auth';
 import { getLoggedInUser } from '../api/user';
-import { OAuthProvider } from '../types/auth';
+import { Assertion, OAuthProvider } from '../types/auth';
 import { User } from '../types/user';
 
 interface AuthContextData {
@@ -22,7 +22,7 @@ interface AuthContextData {
   shouldOpenLoginModal: boolean;
   authenticate: (
     provider: OAuthProvider,
-    authCode: string,
+    assertion: Assertion,
     redirectUri: string
   ) => Promise<void>;
   openLoginModal: () => void;
@@ -79,10 +79,10 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
   const authenticate = useCallback(
     (
       provider: OAuthProvider,
-      authCode: string,
+      assertion: Assertion,
       redirectUri: string
     ): Promise<void> => {
-      return getAccessToken(provider, authCode, redirectUri)
+      return getAccessToken(provider, assertion, redirectUri)
         .then((tokenResponse) => {
           setIsLoggedIn(true);
 

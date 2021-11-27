@@ -8,19 +8,22 @@ import { OAuthProvider } from '../../../types/auth';
 export default function AuthCallbackPage(): ReactElement {
   const { authenticate } = useAuth();
   const router = useRouter();
-  const { provider, code } = router.query;
+  const params = router.query;
 
   useEffect(() => {
-    if (provider && code) {
-      authenticate(
-        provider as OAuthProvider,
-        code as string,
-        getOAuthRedirectUri(provider as OAuthProvider)
-      )
+    if (params) {
+      // Redirect to home page if user denies authorization
+      if (params?.denied) {
+        router.replace('/');
+      }
+
+      const provider = params?.provider as OAuthProvider;
+
+      authenticate(provider, params, getOAuthRedirectUri(provider))
         .then(() => router.replace('/'))
         .catch(() => console.error('Failed to authenticate'));
     }
-  }, [provider, code]);
+  }, [params]);
 
   return (
     <div className="flex items-center justify-center min-h-screen">

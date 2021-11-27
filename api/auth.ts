@@ -1,10 +1,10 @@
 import { AxiosResponse } from 'axios';
-import { OAuthProvider, TokenResponse } from '../types/auth';
+import { Assertion, OAuthProvider, TokenResponse } from '../types/auth';
 import client from './client';
 
 export const getAccessToken = (
   provider: OAuthProvider,
-  assertion: string,
+  assertion: Assertion,
   redirectUri: string = null
 ): Promise<TokenResponse> => {
   return client

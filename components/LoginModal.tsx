@@ -4,6 +4,7 @@ import { authorizeWithProvider } from '../lib/auth';
 import SocialLoginButton from './SocialLoginButton';
 import GithubLogo from '../public/icons/github.svg';
 import GoogleLogo from '../public/icons/google.svg';
+import TwitterLogo from '../public/icons/twitter.svg';
 import IconTimes from '../public/icons/times.svg';
 
 interface ModalProps {
@@ -55,6 +56,14 @@ const LoginModal = ({ open, onClose }: ModalProps): ReactElement => {
                   onClick={() => authorizeWithProvider('github')}
                 >
                   Sign in with Github
+                </SocialLoginButton>
+
+                <SocialLoginButton
+                  className="my-2"
+                  icon={<TwitterLogo />}
+                  onClick={() => authorizeWithProvider('twitter')}
+                >
+                  Sign in with Twitter
                 </SocialLoginButton>
               </div>
 

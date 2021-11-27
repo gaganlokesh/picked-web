@@ -1,6 +1,6 @@
 type TokenType = 'Bearer';
 
-export type OAuthProvider = 'google' | 'github';
+export type OAuthProvider = 'google' | 'github' | 'twitter';
 
 export interface TokenResponse {
   accessToken: string;
@@ -9,4 +9,8 @@ export interface TokenResponse {
   createdAt: number;
   refreshToken?: string;
   scope?: string;
+}
+
+export interface Assertion {
+  [key: string]: unknown;
 }

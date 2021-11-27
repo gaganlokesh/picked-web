@@ -1,9 +1,10 @@
 import { ReactElement } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import { authorizeWithProvider } from '../../lib/auth';
 import SocialLoginButton from '../SocialLoginButton';
 import GoogleLogo from '../../public/icons/google.svg';
 import GithubLogo from '../../public/icons/github.svg';
-import { authorizeWithProvider } from '../../lib/auth';
+import TwitterLogo from '../../public/icons/twitter.svg';
 
 const JoinCommunity = (): ReactElement => {
   const { isLoggedIn } = useAuth();
@@ -30,6 +31,14 @@ const JoinCommunity = (): ReactElement => {
           onClick={() => authorizeWithProvider('github')}
         >
           Signin with Github
+        </SocialLoginButton>
+
+        <SocialLoginButton
+          className="my-2"
+          icon={<TwitterLogo />}
+          onClick={() => authorizeWithProvider('twitter')}
+        >
+          Signin with Twitter
         </SocialLoginButton>
       </div>
       <div className="w-11/12 mx-auto text-sm text-center text-neutral">
