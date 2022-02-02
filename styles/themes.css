@@ -1,5 +1,5 @@
 :root {
-  --primary-darkest: theme('colors.coolGray.900');
+  --primary-darkest: theme('colors.emerald.900');
   --primary-darker: theme('colors.emerald.800');
   --primary-dark: theme('colors.emerald.700');
   --primary-semidark: theme('colors.emerald.600');
@@ -7,15 +7,15 @@
   --primary-semilight: theme('colors.emerald.300');
   --primary-light: theme('colors.emerald.200');
   --primary-lighter: theme('colors.emerald.100');
-  --primary-lightest: theme('colors.coolGray.50');
+  --primary-lightest: theme('colors.emerald.50');
 
-  --neutral-darkest: theme('colors.coolGray.900');
-  --neutral-darker: theme('colors.coolGray.800');
-  --neutral-dark: theme('colors.coolGray.700');
-  --neutral-semidark: theme('colors.coolGray.600');
-  --neutral: theme('colors.coolGray.500');
-  --neutral-semilight: theme('colors.coolGray.400');
-  --neutral-light: theme('colors.coolGray.200');
-  --neutral-lighter: theme('colors.coolGray.100');
-  --neutral-lightest: theme('colors.coolGray.50');
+  --neutral-darkest: theme('colors.gray.900');
+  --neutral-darker: theme('colors.gray.800');
+  --neutral-dark: theme('colors.gray.700');
+  --neutral-semidark: theme('colors.gray.600');
+  --neutral: theme('colors.gray.500');
+  --neutral-semilight: theme('colors.gray.400');
+  --neutral-light: theme('colors.gray.200');
+  --neutral-lighter: theme('colors.gray.100');
+  --neutral-lightest: theme('colors.gray.50');
 }

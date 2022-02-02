@@ -1,11 +1,13 @@
 const colors = require('tailwindcss/colors');
 
 module.exports = {
-  purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
-  darkMode: false, // or 'media' or 'class'
+  content: [
+    './pages/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}',
+  ],
   theme: {
     colors: {
-      coolGray: colors.coolGray,
+      gray: colors.gray,
       emerald: colors.emerald,
       white: colors.white,
       primary: {
@@ -36,10 +38,6 @@ module.exports = {
         xl: '0.75rem',
       },
     },
-  },
-  variants: {
-    padding: ['first'],
-    extend: {},
   },
   plugins: [
     require('@tailwindcss/aspect-ratio'),

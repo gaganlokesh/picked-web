@@ -2,12 +2,12 @@
   @apply flex;
 
   & .media {
-    @apply flex-shrink-0 w-full h-auto mt-1 mr-3 md:mr-4;
+    @apply shrink-0 w-full h-auto mt-1 mr-3 md:mr-4;
     max-width: 26%;
   }
 
   & .content {
-    @apply flex flex-col justify-between flex-grow;
+    @apply flex flex-col justify-between grow;
 
     & .source {
       @apply text-xs font-semibold tracking-widest uppercase text-primary-semidark;
@@ -31,7 +31,7 @@
   @apply flex;
 
   & .content {
-    @apply flex flex-col justify-between flex-grow;
+    @apply flex flex-col justify-between grow;
 
     & .source {
       @apply text-xs font-medium tracking-widest uppercase text-primary-semidark;

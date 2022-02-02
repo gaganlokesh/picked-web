@@ -21,7 +21,7 @@ const SourceItem = ({
   return (
     <>
       <div className={classNames('flex items-center', className)}>
-        <div className="flex-shrink-0 mr-3">
+        <div className="mr-3 shrink-0">
           <Link href={`/sources/${source?.slug}`}>
             <a className="flex">
               <Image
@@ -36,7 +36,7 @@ const SourceItem = ({
         </div>
         <div className="flex-1">
           <Link href={`/sources/${source?.slug}`}>
-            <a className="line-clamp-1 cursor-pointer">
+            <a className="cursor-pointer line-clamp-1">
               {size === 'sm' ? <h6>{source.name}</h6> : <h5>{source.name}</h5>}
             </a>
           </Link>
