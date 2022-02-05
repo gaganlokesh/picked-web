@@ -30,6 +30,7 @@ const SourceItem = ({
                 width="50"
                 height="50"
                 className="rounded cursor-pointer"
+                unoptimized={true}
               />
             </a>
           </Link>

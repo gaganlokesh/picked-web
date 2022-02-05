@@ -40,6 +40,7 @@ const SourceDetail = ({
             width={80}
             height={80}
             className="rounded-lg"
+            unoptimized={true}
           />
         </div>
         <div className="px-6">

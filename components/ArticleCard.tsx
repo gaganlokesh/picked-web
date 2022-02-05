@@ -60,7 +60,7 @@ const ArticleCard = ({
   return (
     <>
       <article className={classNames(styles[variant], className)}>
-        {showMedia && (
+        {showMedia && article?.imageUrl && (
           <div className={styles.media}>
             <Image
               src={article.imageUrl}
@@ -71,6 +71,7 @@ const ArticleCard = ({
               height={145}
               layout="responsive"
               className="rounded"
+              unoptimized={true}
             />
           </div>
         )}

@@ -32,6 +32,7 @@ const Header = (): ReactElement => {
                           width={45}
                           height={45}
                           className="rounded-full"
+                          unoptimized={true}
                         />
                       </Popover.Button>
                       <Popover.Panel className="absolute right-0 z-10 mt-2 bg-white border rounded shadow-lg w-72">
