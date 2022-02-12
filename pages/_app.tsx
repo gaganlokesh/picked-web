@@ -5,9 +5,7 @@ import { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { SWRConfig } from 'swr';
-import { AuthProvider, useAuth } from '../contexts/AuthContext';
-import LoginModal from '../components/LoginModal';
-import Header from '../components/Header';
+import { AuthProvider } from '../contexts/AuthContext';
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -18,8 +16,6 @@ type AppPropsWithLayout = AppProps & {
 };
 
 function Layout({ Component, pageProps }: AppPropsWithLayout): ReactElement {
-  const { isLoggedIn, shouldOpenLoginModal, closeLoginModal } = useAuth();
-
   const getLayout = Component.getLayout ?? ((page) => page);
 
   return (
@@ -30,12 +26,7 @@ function Layout({ Component, pageProps }: AppPropsWithLayout): ReactElement {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header />
-      <div className="pt-16">{getLayout(<Component {...pageProps} />)}</div>
-
-      {!isLoggedIn && (
-        <LoginModal open={shouldOpenLoginModal} onClose={closeLoginModal} />
-      )}
+      {getLayout(<Component {...pageProps} />)}
     </>
   );
 }

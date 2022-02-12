@@ -1,9 +1,10 @@
 import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
 import Feed from '../components/Feed';
+import AppLayout from '../components/layouts/AppLayout';
 import { useAuth } from '../contexts/AuthContext';
 
-export default function BookmarksPage(): ReactElement {
+function BookmarksPage(): ReactElement {
   const router = useRouter();
   const { isReady, isLoggedIn } = useAuth();
 
@@ -25,3 +26,7 @@ export default function BookmarksPage(): ReactElement {
     </>
   );
 }
+
+BookmarksPage.getLayout = AppLayout;
+
+export default BookmarksPage;

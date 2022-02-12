@@ -3,6 +3,7 @@ import { Tab } from '@headlessui/react';
 import classNames from 'classnames';
 import SourceList from '../../components/SourceList';
 import { useAuth } from '../../contexts/AuthContext';
+import AppLayout from '../../components/layouts/AppLayout';
 
 function SourcesPage(): ReactElement {
   const { isReady, isLoggedIn } = useAuth();
@@ -26,7 +27,7 @@ function SourcesPage(): ReactElement {
 
   return (
     <>
-      <div className="max-w-3xl mx-auto px-4">
+      <div className="mx-auto max-w-3xl px-4">
         <h1 className="my-14">Sources</h1>
         <Tab.Group>
           <Tab.List className="mb-2 border-b border-neutral-light">
@@ -62,5 +63,7 @@ function SourcesPage(): ReactElement {
     </>
   );
 }
+
+SourcesPage.getLayout = AppLayout;
 
 export default SourcesPage;

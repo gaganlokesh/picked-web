@@ -9,6 +9,7 @@ import { followSource, unfollowSource } from '../../api/source';
 import Button from '../../components/Button';
 import SuggestedSources from '../../components/widgets/SuggestedSources';
 import SourceDetail from '../../components/widgets/SourceDetail';
+import AppLayout from '../../components/layouts/AppLayout';
 
 const SourcePage = (): ReactElement => {
   const router = useRouter();
@@ -32,10 +33,10 @@ const SourcePage = (): ReactElement => {
 
   return (
     <>
-      <div className="container py-5 mx-auto">
+      <div className="container mx-auto py-5">
         <div className="flex">
           <main className="flex-1 divide-y divide-neutral-light">
-            <div className="flex items-end justify-between mb-7">
+            <div className="mb-7 flex items-end justify-between">
               <div>
                 <span className="text-lg font-medium text-neutral">
                   Stories from
@@ -57,8 +58,8 @@ const SourcePage = (): ReactElement => {
               <Feed requestUrl={slug ? `/sources/${slug}/articles` : null} />
             </div>
           </main>
-          <div className="hidden mx-6 xl:mx-12 lg:block"></div>
-          <aside className="hidden w-[325px] xl:w-[370px] lg:block">
+          <div className="mx-6 hidden lg:block xl:mx-12"></div>
+          <aside className="hidden w-[325px] lg:block xl:w-[370px]">
             <div className="grid gap-y-6">
               <SourceDetail source={source} onFollowClick={handleFollowClick} />
               <SuggestedSources />
@@ -69,5 +70,7 @@ const SourcePage = (): ReactElement => {
     </>
   );
 };
+
+SourcePage.getLayout = AppLayout;
 
 export default SourcePage;
