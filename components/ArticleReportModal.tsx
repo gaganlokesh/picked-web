@@ -1,5 +1,11 @@
 import { Dialog } from '@headlessui/react';
-import React, { ReactElement, useEffect, useMemo, useState } from 'react';
+import React, {
+  ReactElement,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Article } from '../types/article';
 import { reportArticle } from '../api/article';
 import Button from './Button';
@@ -55,6 +61,7 @@ const ArticleReportModal = ({
   const [showMessageInput, setShowMessageInput] = useState<boolean>(false);
   const [isSubmitDisabled, setSubmitDisabled] = useState<boolean>(false);
   const [submitted, setSubmitted] = useState<boolean>(false);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (input.category === 'other') {
@@ -95,6 +102,7 @@ const ArticleReportModal = ({
   return (
     <Dialog
       open={open}
+      initialFocus={closeButtonRef}
       onClose={handleClose}
       className="fixed inset-0 z-10 overflow-y-auto"
     >
@@ -105,9 +113,10 @@ const ArticleReportModal = ({
           &#8203;
         </span>
 
-        <div className="inline-block w-11/12 max-w-md p-6 my-8 overflow-hidden text-center align-middle transition-all transform bg-white shadow-xl md:w-full rounded-2xl">
+        <div className="my-8 inline-block w-11/12 max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-center align-middle shadow-xl transition-all md:w-full">
           <button
-            className="absolute text-2xl right-6 top-5 text-neutral"
+            ref={closeButtonRef}
+            className="absolute right-6 top-5 text-2xl text-neutral"
             onClick={handleClose}
           >
             <IconTimes className="ml-auto cursor-pointer" />
@@ -117,12 +126,12 @@ const ArticleReportModal = ({
             <>
               <Dialog.Title className="font-medium">Report</Dialog.Title>
               <form onSubmit={handleReportSubmit}>
-                <div className="my-6 text-lg text-left md:mx-4">
+                <div className="my-6 text-left text-lg md:mx-4">
                   <fieldset onChange={handleChange}>
                     {reportCategories.map((category, index) => (
                       <label
                         key={index}
-                        className="flex items-center my-3 cursor-pointer"
+                        className="my-3 flex cursor-pointer items-center"
                       >
                         <input
                           type="radio"
@@ -140,7 +149,7 @@ const ArticleReportModal = ({
                       name="reason"
                       placeholder="Tell us more"
                       onChange={handleChange}
-                      className="block w-full mt-1 transition rounded-md shadow-sm border-neutral-light focus:border-neutral focus:ring-1 focus:ring-neutral"
+                      className="mt-1 block w-full rounded-md border-neutral-light shadow-sm transition focus:border-neutral focus:ring-1 focus:ring-neutral"
                       required
                     />
                   )}
@@ -152,13 +161,13 @@ const ArticleReportModal = ({
             </>
           ) : (
             <>
-              <div className="my-5 text-success-600 text-7xl">
+              <div className="my-5 text-7xl text-success-600">
                 <IconCheck className="mx-auto" />
               </div>
-              <Dialog.Title className="w-3/4 mx-auto my-2 font-medium">
+              <Dialog.Title className="mx-auto my-2 w-3/4 font-medium">
                 Thanks for your report!
               </Dialog.Title>
-              <p className="my-2 text-lg text-center text-neutral-dark">
+              <p className="my-2 text-center text-lg text-neutral-dark">
                 We will review it as soon as possible.
               </p>
             </>
