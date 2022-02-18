@@ -30,7 +30,7 @@ const Button = ({
 
   return (
     <button {...props} className={classes}>
-      <span>{children}</span>
+      {children}
     </button>
   );
 };
