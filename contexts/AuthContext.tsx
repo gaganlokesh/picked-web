@@ -25,6 +25,7 @@ interface AuthContextData {
     assertion: Assertion,
     redirectUri: string
   ) => Promise<void>;
+  refreshUser: () => void;
   openLoginModal: () => void;
   closeLoginModal: () => void;
   logout: () => Promise<void>;
@@ -65,7 +66,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
     }
   );
 
-  const { data: userData } = useSWR<User>(
+  const { data: userData, mutate: refreshUser } = useSWR<User>(
     isLoggedIn ? '/users/me' : null,
     getLoggedInUser
   );
@@ -112,13 +113,22 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
       user,
       isReady,
       isLoggedIn,
+      refreshUser,
       authenticate,
       shouldOpenLoginModal,
       openLoginModal: () => setShouldOpenLoginModal(true),
       closeLoginModal: () => setShouldOpenLoginModal(false),
       logout,
     }),
-    [user, isReady, isLoggedIn, authenticate, shouldOpenLoginModal, logout]
+    [
+      user,
+      isReady,
+      isLoggedIn,
+      refreshUser,
+      authenticate,
+      shouldOpenLoginModal,
+      logout,
+    ]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
