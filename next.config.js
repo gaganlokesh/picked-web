@@ -7,6 +7,13 @@ module.exports = {
           loader: '@svgr/webpack',
           options: {
             icon: true,
+            svgoConfig: {
+              plugins: [
+                {
+                  prefixIds: false,
+                },
+              ],
+            },
           },
         },
       ],
