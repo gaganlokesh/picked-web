@@ -18,4 +18,24 @@
   --neutral-light: theme('colors.gray.200');
   --neutral-lighter: theme('colors.gray.100');
   --neutral-lightest: theme('colors.gray.50');
+
+  --success-darkest: theme('colors.green.900');
+  --success-darker: theme('colors.green.800');
+  --success-dark: theme('colors.green.700');
+  --success-semidark: theme('colors.green.600');
+  --success: theme('colors.green.500');
+  --success-semilight: theme('colors.green.300');
+  --success-light: theme('colors.green.200');
+  --success-lighter: theme('colors.green.100');
+  --success-lightest: theme('colors.green.50');
+
+  --danger-darkest: theme('colors.red.900');
+  --danger-darker: theme('colors.red.800');
+  --danger-dark: theme('colors.red.700');
+  --danger-semidark: theme('colors.red.600');
+  --danger: theme('colors.red.500');
+  --danger-semilight: theme('colors.red.300');
+  --danger-light: theme('colors.red.200');
+  --danger-lighter: theme('colors.red.100');
+  --danger-lightest: theme('colors.red.50');
 }
